@@ -12,7 +12,10 @@ Smart Museum PoC App from Internet of Things course a.y. 2020 at Sapienza Univer
 ## The Idea
 TODO: a brief description (1 paragraph) of the main idea of the product/service.
 
-## Useful Stuff
+## Useful Links
+(to do: add link to all the document in the requirements)
+
+## Requirements
 - links to the documents 2,3,4,5.
 - [Design]() providing details on the product/service from the user point of view
 - [Architecture]() providing details on the technical aspects of the product/service, including a high-level presentation of the conceptual architecture of the software and hardware components that make up the product/service, a description of the main software/hardware components (e.g., 1 paragraph for each component), how these components interact (e.g., network protocols, APIs used), a network architecture clearly depicting the IoT elements, Edge components, Cloud components, End-user components.
