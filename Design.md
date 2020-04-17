@@ -18,3 +18,5 @@ __A Typical Day__
 * He continues to study.
 * He leaves for home at 6pm. Sometimes he continues to study 1-2 hours at home.      
 * Three nights a week he works as a waiter at a small eco-restaurant from 6pm to 10pm.
+
+![Anand Storyboard](./img/anand_storyboard.png)
