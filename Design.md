@@ -1,4 +1,15 @@
 # Design
+According to [official Ministry of Education data](http://ustat.miur.it/dati/didattica/italia/atenei-statali/sapienza), Sapienza had more of 10.000 foreign students in 2018 from a variety of countries:
+![int data](./img/int-data.PNG)  
+During a meeting with museum managers it emerged that the majority of visitors of the museum are students both from Sapienza and outside (expecially art schools). Our idea to transform the Museum of Classical Art at Sapienza is to provide to users a completely digital guide inside the musem. The service will recognize the room in which the user is thanks to BLE Beacons and it will show to the user all the art pieces' descriptions, and digital content associated with the artwork (like audio description, videos etc...) in the room. The system will also allow users to get authomatic translation of the information retrived, in any language and will also provide custom paths inside the museum.   
+In the meanwhile the museum's managers can (1) monitor traffic and crowding inside the museum, (2) optimize arrangement of artworks to avoid crowded rooms for example, (3) to understand which rooms and which operas get more attention, (4) track user movements for further advanced analysis, (5) sell digital pay-per-view content, (6) provide custom paths inside the musem according to some special criteria. Any modification of those digital content will be immediately available for users.    
+  
+ The app is tought to be as general as possible and open source so that it might become a real comunity project and spread around museum of the world.
+  
+Possible future developments might be: 
+- integrate an augmented reality engine to make the tour more interactive.
+- Provide audio broadcasting to a group of users to implement live tour with a real guide using the app, replacing old radio devices provied by the majority of the museum nowadays.  
+- Do not force museum to use BLE beacons but provide a variety of oracles like QR codes, manual selection, AR tags or swipe among rooms for museum with forced routes. 
 
 ## Personas :pouting_man: :pouting_woman:
 
