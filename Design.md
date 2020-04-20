@@ -19,4 +19,4 @@ __A Typical Day__
 * He leaves for home at 6pm. Sometimes he continues to study 1-2 hours at home.      
 * Three nights a week he works as a dishwasher at a small eco-restaurant from 6pm to 10pm.
 
-![Anand Storyboard](./img/anand_storyboard.png)
+![Anand Storyboard](./img/anand_storyboardv2.png)
