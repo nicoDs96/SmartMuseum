@@ -22,7 +22,7 @@ With [Azure cost estimator](https://azure.microsoft.com/it-it/pricing/calculator
 
 However, 500 GB is an estimate of storage of a very big museum. A more realistic scenario for the Sapienza Classical Art Museum is a required storage of about 50GB (see tables below). Hence the major cost would be the app hosting service (60$/mo. on AWS and 20$/mo on Azure). Here we can think to switch to MongoDB Cloud data storage service, called Atlas, with a cost of 0.25$/hour on avg. (AWS, Google, Azure) for 50 GB storage instance.   
 
-Now we are going to explore the on-premise solution. We assume server as well as all the required Infrastructure support (IP address, network, etc.) is provided by [InfoSapienza](https://web.uniroma1.it/infosapienza/) hence we do not need to buy anything but the hardware required. by the project (ble beacons).
+Now we are going to explore the on-premise solution. We assume server as well as all the required Infrastructure support (IP address, network, etc.) is provided by [InfoSapienza](https://web.uniroma1.it/infosapienza/) hence we do not need to buy anything but the hardware required by the project (ble beacons).
 
 <TODO: continue...>
 
