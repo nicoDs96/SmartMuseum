@@ -45,10 +45,10 @@ __Home, internet and tech__.
 As already said gabriella is a fan of technology in fact her house is smart, all the appliances are smart: the lights, the television, the audio system, for example on Sunday morning she wakes up and asks Amazon alexa to put some relaxing music in the afternoon she asks alexa for a film to watch on smart TV and then she enjoys watching it with her family.  
 
 __A Typical Day__.   
-*Wake up at 7, breakfast with the family.  
-*She takes the kids to school.  
-*Then she goes to work.  
-*She eats her lunch.  
-*Afternoon shift at the museum.  
-*Then she come back at home.  
-![Gabriella Storyboard]()
+* Wake up at 7, breakfast with the family.  
+* She takes the kids to school.  
+* Then she goes to work.  
+* She eats her lunch.  
+*  Afternoon shift at the museum.  
+* Then she come back at home.  
+![Gabriella Storyboard](./img/gabriella_storyboard.png)
