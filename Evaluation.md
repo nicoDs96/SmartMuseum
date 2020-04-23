@@ -1,11 +1,12 @@
 # :chart_with_upwards_trend: Evaluation 
 
 Evaluation providing details on how to evaluate the product/service, 
-(i) from a user experience point of view, 
+(i) from a user experience point of view :-> prototype to user, questionaries (?)
 
 (ii) from a technical point of view. 
 ## Technical Evaluation
-According to the architecture we have described in the [Architecture file](Architecture.md) we are goingo to compare costs of a solution cloud based and a soluton on premise as well as required hardware costs. We assume project is open source hence no employee to pay. As time required to develop we estimate 6 months assuming one cross functional team of 5-7 people adopting agile methodology.  
+We have decided to realize a backend microservice architecture to allow modularity and to make system evolution simple so that the application will be as long-lasting as possible, tolerant to changes, integrable with other projects from the course easily.
+According to the architecture we have described in the [Architecture file](Architecture.md) we are goingo to compare costs of a solution cloud based and a soluton on premise as well as required hardware costs. We assume project is open source hence no employee to pay.
 Cloud Hosting Costs (using AWS Pricing Calculator):
 - To host the Node.js API we use an AWS EC2 on demand instance with daily spike traffic and that can scale up to 2 instances running. We assumed a 3.30 h daily peak of traffic, 2 vCPUs, 4 GB of memory and 32 GB EBS storage. The cost per month is 60.35$ choosing one EU region.
 -  To store data we use simple storage service S3, with an estimate (see database section below) of 500GB per month of storage needed with 100 PUT and 10000 GET, 100 GB of retrived data each month and 500 GB of data scanned. Total: 13.22 $
