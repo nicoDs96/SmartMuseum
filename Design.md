@@ -51,4 +51,4 @@ __A Typical Day__.
 * She eats her lunch.  
 *  Afternoon shift at the museum.  
 * Then she come back at home.  
-![Gabriella Storyboard]()
+![Gabriella Storyboard](./img/gabriella_storyboard.png)
