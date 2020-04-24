@@ -33,19 +33,19 @@ __A Typical Day__
 
 ![Anand Storyboard](./img/anand_storyboardv2.png)
 
-### :pouting_woman: Gabriella. 
-__Hard Facts__.    
+### :pouting_woman: Gabriella 
+__Hard Facts__    
 Gabriella is 54 years old curator of the Sapienza museum. She is Italian, she graduated in cultural heritage and then supported the master's degree in Conservation of Architectural and Environmental Heritage.
 She is wife and mother of two children but above all a woman of great culture, she has an irrepressible passion for art since she was a child, she is also a great supporter of technologies in general but especially for those that  can be put at the service of her museum, in fact she would like to transform her museum into a smart museum making it as accessible and interactive as possible.  
 
-__Interest and Value__.  
+__Interest and Value__  
 Gabriella loves watching movies and going out with her family on the weekend, especially when the weather is good, she is a meteoropathic and loves summer but in winter she is more concentrated, obviously without taking away too much space for fun.
 But when she wants time for her, she reads a nice book in the living room drinking tea and maybe thinking about some innovation for the museum.  
 
-__Home, internet and tech__.   
+__Home, internet and tech__   
 As already said gabriella is a fan of technology in fact her house is smart, all the appliances are smart: the lights, the television, the audio system, for example on Sunday morning she wakes up and asks Amazon alexa to put some relaxing music in the afternoon she asks alexa for a film to watch on smart TV and then she enjoys watching it with her family.  
 
-__A Typical Day__.   
+__A Typical Day__   
 * Wake up at 7, breakfast with the family.  
 * She takes the kids to school.  
 * Then she goes to work.  
