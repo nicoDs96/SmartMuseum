@@ -10,6 +10,7 @@ Possible future developments might be:
 - integrate an augmented reality engine to make the tour more interactive.
 - Provide audio broadcasting to a group of users to implement live tour with a real guide using the app, replacing old radio devices provied by the majority of the museum nowadays.  
 - Do not force museum to use BLE beacons but provide a variety of oracles like QR codes, manual selection, AR tags or swipe among rooms for museum with forced routes. 
+- Integration with other classmate projects.
 
 ## Personas :pouting_man: :pouting_woman:
 
