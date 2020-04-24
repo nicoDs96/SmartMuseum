@@ -1,13 +1,16 @@
 # :chart_with_upwards_trend: Evaluation 
 
-Evaluation providing details on how to evaluate the product/service, 
-(i) from a user experience point of view :-> prototype to user, questionaries (?)
+## User Experience Evaluation
+To evaluate the user experience we have designed a prototyper of the app (using Adobe XD Mockup software) and we have tested the usability of the product with some sample users.  
+Prototype:  
+![](/img/proto.gif)  
+Feedback:  
 
-(ii) from a technical point of view. 
 ## Technical Evaluation
 We have decided to realize a backend microservice architecture to allow modularity and to make system evolution simple so that the application will be as long-lasting as possible, tolerant to changes, integrable with other projects from the course easily.
 According to the architecture we have described in the [Architecture file](Architecture.md) we are goingo to compare costs of a solution cloud based and a soluton on premise as well as required hardware costs. We assume project is open source hence no employee to pay.
-Cloud Hosting Costs (using AWS Pricing Calculator):
+### Cloud Hosting Costs 
+*using AWS Pricing Calculator*:
 - To host the Node.js API we use an AWS EC2 on demand instance with daily spike traffic and that can scale up to 2 instances running. We assumed a 3.30 h daily peak of traffic, 2 vCPUs, 4 GB of memory and 32 GB EBS storage. The cost per month is 60.35$ choosing one EU region.
 -  To store data we use simple storage service S3, with an estimate (see database section below) of 500GB per month of storage needed with 100 PUT and 10000 GET, 100 GB of retrived data each month and 500 GB of data scanned. Total: 13.22 $
 - Translation service: free
@@ -22,14 +25,18 @@ With [Azure cost estimator](https://azure.microsoft.com/it-it/pricing/calculator
 </p>   
 
 However, 500 GB is an estimate of storage of a very big museum. A more realistic scenario for the Sapienza Classical Art Museum is a required storage of about 50GB (see tables below). Hence the major cost would be the app hosting service (60$/mo. on AWS and 20$/mo on Azure). Here we can think to switch to MongoDB Cloud data storage service, called Atlas, with a cost of 0.25$/hour on avg. (AWS, Google, Azure) for 50 GB storage instance.   
+__Optimize Storage Costs__  
+We can cut storage costs by not storing any audio tape. Instead we are goingo to store audio transcription and we use a text-to-speech service to reprodoce tapes. The cost of this service on google is 4$/1 million character but we can also [embedd a custom TTS engine in the android app](https://developer.android.com/reference/android/speech/tts/package-summary), hence spending nothing and reducing the database size to at most 1GB (approximation). *NB. we are trading off storage cost with more CPU power (and energy consumption) if we embedd TTS engine in the app.*
 
-Now we are going to explore the on-premise solution. We assume server as well as all the required Infrastructure support (IP address, network, etc.) is provided by [InfoSapienza](https://web.uniroma1.it/infosapienza/) hence we do not need to buy anything but the hardware required by the project (ble beacons).
+### On-Premise Costs
+We assume server as well as all the required Infrastructure support (IP address, networking, DB, backup, security etc.) is provided by [InfoSapienza](https://web.uniroma1.it/infosapienza/) hence we do not need to buy anything but the hardware required by the project (ble beacons). This kind of hardware should be bought even if we choose a cloud solution, hence it is not considered here. If the assumption is true and the costs to run this applicaiton are minimum wrt all the other stuff running on the servers, this solution might be the most convenient. 
 
-<TODO: continue...>
+### But What if...
+If  the traffic in the museum is limited, me might think to expose the museum API with a cluster made of Raspberry PI 4B. Indeed a lot of makers are experimenting with this kind of clusters running Kubernetees and Docker containers on those devices (examples [here](https://opensource.com/article/20/3/kubernetes-raspberry-pi-k3s), [here](https://github.com/mhausenblas/kube-rpi),[here](https://github.com/codesqueak/k18srpi4),[here](https://itnext.io/building-a-kubernetes-cluster-on-raspberry-pi-and-low-end-equipment-part-1-a768359fbba3)).   The hardware is low cost (20$ for a board) and additionally we only need some ethernet cable and a switch. If we setup a cluster with 3 workers and 1 master the total cost is around 100$. [The power consumption of a board at 400% of CPU consumption is 6W](https://www.pidramble.com/wiki/benchmarks/power-consumption) (4 board consumes 0,024 KW), the price of energy is around  0,03037 €/kWh ([ref](https://tariffe.segugio.it/guide-e-strumenti/domande-frequenti/quanto-costa-un-kwh-di-energia-elettrica.aspx)), hence we should pay: ```KW * hours_of_usage * price (€/kWh) --> 0,024* 24*365 *0,03037  --> 6.4``` less than 7€ in a year.  
 
-### Storage Volume Estimate
-
-First of all we introduce a sketch of the data model (might variy during time if some special need emerges). Among the NoSQL family we have decide to choose MongoDB because it is open-source, simple, distributed and easy to scale, can migrate easy from on premise to cloud thanks to Atlas. Hence we assume our data will be stored in BSON and we estimate sizes according to its [specification](http://bsonspec.org/spec.html).  
+### Final Notes on Storage Volume Estimation
+here a quick explanation on how we have evaluated storage requirements. 
+First of all we introduce a sketch of the data model (might variy during time if some special need emerges). Among the NoSQL family we have decided to choose MongoDB because it is open-source, simple, distributed and easy to scale, can migrate easy from on premise to cloud thanks to Atlas. Hence we assume our data will be stored in BSON and we estimate sizes according to its [specification](http://bsonspec.org/spec.html).  
 __Data Model__  
 *Opera:*  
 ``` javascript
