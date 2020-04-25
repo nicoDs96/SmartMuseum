@@ -11,14 +11,14 @@ The system can be easily integrated with already existing services. All those mi
 
 
 ### Museum API
-The middleware API exposes all the museum services, it will allow visitors' app to retrieve informations of artworks or custom path and museum administrators' app to upload data assets and retrieve indoor traffic data ([API DOC](./API_DOC.md)).
+The middleware API exposes all the museum services, it will allow visitors' app to retrieve informations of artworks or custom path and museum administrators' app to upload data assets and retrieve indoor traffic data ([API DOC](/doc/APIDOC.pdf)).
 It is realized in Nodejs with the Express framework.
 
 ### Translation Engine
 Is the service in charge of translate text into any language. At the moment we have decided to use the Yandex service that is free of charge. Since the service comes with some limitations in the number of requests per month we will store into the database the translations so that we will reduce the number of requests to the necessary. In the future the service can be changed with any other provider (Google Translate, IBM Watson, ...) without affecting all the other services. We only need to change requests from the Museum API to correct translation service.
 
 ### Museum DB
-It is a non-relational database that stores all information required. In the [evaluation]() part we will discuss cloud or on-premise solutions as well as particular DBs. The choice of a NoSQL database is for its non-rigid structure that allows to speed up development. However if there is any constraint on the architecture, the api can be easly adapted to talk and support whatever kind of database.
+It is a non-relational database that stores all information required. In the [evaluation](Evaluation.md) part we will discuss cloud or on-premise solutions as well as particular DBs. The choice of a NoSQL database is for its non-rigid structure that allows to speed up development. However if there is any constraint on the architecture, the api can be easly adapted to talk and support whatever kind of database.
 
 ### Visitors Mobile App
 It is in charge of connecting to beacons and send to the museum service the indoor location data. Thanks to those position data it will retrieve information only about artworks in the current room. The user can also select custom paths to visit only part of the museum he is interested in and be guided by the app among the rooms. The AR engine is a future development to make the experience inside the museum more digital and maybe attractive from a child/teenager point of view (second main visitors of the museum). At the moment we are going to develop it only for Android with Android studio. In the future Flutter may be a nice cross-platform tool.
@@ -27,7 +27,7 @@ It is in charge of connecting to beacons and send to the museum service the indo
 Thanks to the dashboard museum administrator will upload a description of the artworks and custom paths (Admin Panel) and they will be able to monitor live and historical traffic inside museum rooms (Analytics). The PoC will be realized in plain javascript and we will use Bootstrap 4 to quickly build responsive layouts. For a production development we might think to use Flutter also for a web-based dashboard.
 
 ### Beacons
-Bluetooth beacons are hardware transmitters - a class of Bluetooth low energy (LE) devices that broadcast their identifier to nearby portable electronic devices. The technology enables smartphones, tablets and other devices to perform actions when close to a beacon[¹](https://en.wikipedia.org/wiki/Bluetooth_low_energy_beacon). In the [evaluation]() part we will discuss about different beacon devices. 
+Bluetooth beacons are hardware transmitters - a class of Bluetooth low energy (LE) devices that broadcast their identifier to nearby portable electronic devices. The technology enables smartphones, tablets and other devices to perform actions when close to a beacon[¹](https://en.wikipedia.org/wiki/Bluetooth_low_energy_beacon). In the [evaluation](Evaluation.md) part we will discuss about different beacon devices. 
 
 
 ## Components Interaction  
@@ -36,4 +36,4 @@ Bluetooth beacons are hardware transmitters - a class of Bluetooth low energy (L
   <img height="50%" width="50%" src="./img/Net-arch.png">
 </p>   
 
-With the current architecture, we only differentiate between two frontends (Mobile App, Museum Dashboard) and the backend. The backend choice between on-premise and cloud solutions will be discussed in the [evaluation]() part.
+With the current architecture, we only differentiate between two frontends (Mobile App, Museum Dashboard) and the backend. The backend choice between on-premise and cloud solutions will be discussed in the [evaluation](Evaluation.md) part.
