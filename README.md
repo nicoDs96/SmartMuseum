@@ -30,8 +30,8 @@ Possible future developments might be:
 
 
 ## TODO
-- HW Eval.
-- UX feedback from prototype.
-- Presentaton idea/UX prototype.
-- Presentation technical part.
-- fix links into documents.
+* [x] HW Eval.
+* [ ] UX feedback from prototype.
+* [ ] Presentaton idea/UX prototype.
+* [ ] Presentation technical part.
+* [x] fix links into documents.
