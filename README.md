@@ -28,10 +28,3 @@ Possible future developments might be:
 - [presentation]() of the product/idea and the evaluation plan.
 - [presentation]() of the technical approach and architecture.
 
-
-## TODO
-* [x] HW Eval.
-* [ ] UX feedback from prototype.
-* [ ] Presentaton idea/UX prototype.
-* [ ] Presentation technical part.
-* [x] fix links into documents.
