@@ -29,6 +29,8 @@ Thanks to the dashboard museum administrator will upload a description of the ar
 ### Nucleo Board
 The Nucleo board is thought to be chosen either with integrated BLE or with an extension board, it is a matter of costs principally. The board will be in charge of collecting environmental sensors data and to send them to a Broker. From the broker, the middleware will be in charge of consuming them and store them in the DB. The API will provide a uniform interface to clients to either realtime data (from the broker) and historical data (from DB). The board will also broadcast beacons unique identifiers to allow indoor tracking. 
 
+### Broker
+The broker will just collect data from the boards when published. As initial solution we will propose to the museum to collect environmental data in aggregated from (for example avg min and max temperature of a given time range). Based on this proposal we decided to use TheThingsNetwork and use their sdk to consume those data.
 
 ## Components Interaction  
 
@@ -36,4 +38,4 @@ The Nucleo board is thought to be chosen either with integrated BLE or with an e
   <img height="50%" width="50%" src="./img/Net-arch.png">
 </p>   
 
-With the current architecture, we only differentiate between two frontends (Mobile App, Museum Dashboard) and the backend. The backend choice between on-premise and cloud solutions will be discussed in the [evaluation](Evaluation.md) part.
+With the current architecture, we only differentiate between two frontends (Mobile App, Museum Dashboard) and the backend. The backend choice between on-premise and cloud solutions will be discussed in the [evaluation](Evaluation.md) part. As initial solution we will propose to the museum to collect environmental data in aggregated from (for example avg min and max temperature of a given time range). Based on this proposal we decided to use LoRaWAN as comunication protocol. If more data are needed we might switch to mqtt/mqtt-sn and change the broker accordingly
