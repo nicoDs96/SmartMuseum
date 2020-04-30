@@ -29,3 +29,10 @@ Possible future developments might be:
 - [Presentation PDF](Presentation.pdf) of the product/idea and the evaluation plan and of the technical approach and architecture.
 
 
+# TO DO
+
+- [ ] Focus on indoor microclimate monitoring -> curator point of view
+- [ ] Modify Gabriella storyboard to reflect the focus on env. monitoring
+- [ ] Remove AR from architecture
+- [ ] Modify all diagrams (architecture.md) to reflect those changes
+- [ ] Change the evaluation.md accordingly (no more beacons, only LoRaWAN and curator dashboard, DB size shrinks)
