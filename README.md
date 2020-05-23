@@ -4,7 +4,6 @@ Smart Museum PoC App from Internet of Things course a.y. 2020 at Sapienza Univer
 ## Realized By  
 - Giovanni Buono ([Linkedin](https://www.linkedin.com/in/giovanni-buono-5229941a4/))  
 - Nicola Di Santo ([Linkedin](https://www.linkedin.com/in/nicola-di-santo-b98647192/))
-- Atrin Barzegar([Linkedin](https://www.linkedin.com/in/atrin-barzegar-309575196))  ?
 
 ## Product Design Advisor
 - Camilla Gironi ([Linkedin](https://www.linkedin.com/in/camilla-gironi/))
