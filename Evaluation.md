@@ -1,4 +1,5 @@
 # :chart_with_upwards_trend: Evaluation 
+This document is the second version of the Evaluation document for the SmartMuseum project. The first version is in the [hisory folder](history/Evaluation.md). Changes to the original evaluation reflect the fact that our first project was too simple in core feature provided, not strictly related to the IoT field and also to wide. With the second version we decided to only focus on the specific indoor environment monitoring feature. In this document, since the data exchanged changes, we evisit cloud costs. We also revisit the User Experience (UX) evaluation process since out target user change. The prototype is also updated to address this pivot.     
 
 ## User Experience Evaluation
 To evaluate the user experience we have designed a prototyper of the app (using Adobe XD Mockup software) and we have tested the usability of the product with some sample users.  

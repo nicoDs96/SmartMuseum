@@ -1,11 +1,12 @@
 # Architecture   
+This document is the second version of the architecture for the SmartMuseum project. The first version is in the [hisory folder](history/Architecture.md). Changes to the original architecture reflect the fact that our first project was too simple in core feature provided, not strictly related to the IoT field and also to wide. Here we decided to only focus on the specific indoor environment monitoring feature and the architecture reflects those changes. As in the frist project, the target is still very specific.
 
 ## High-Level Presentation 
 <p align="center">
   <img height="50%" width="50%" src="img_new/arch.png">
 </p>   
 
-In principle, this is a first step for the museum through a transition into intelligent and efficient management of its resources involving two strategic areas: asset preservation and energy efficiency. Indeed, artworks conservation is a key need for a museum as pointed out during the lecture with Sapienza Museum Experts. In the meanwhile, this activity can be performed in a very smart way with the help of IoT, hence sensors, actuators and the associated infrastructure, to reduce energy cost and to augment human awareness of the process thank to newest technologies.  
+In principle, this is a first step for the museum through a transition into intelligent and efficient management of its resources involving two strategic areas: asset preservation and energy efficiency. Indeed, artworks conservation is a key need for a museum as pointed out during the lecture with Sapienza Museum Experts. In the meanwhile, this activity can be performed in a very smart way with the help of IoT, sensors, actuators, to reduce energy cost and to augment human awareness of the process thank to newest technologies.  
 On the backend, the key concept is to develop a microservice architecture to obtain modularity and have a dynamic evolving system with a series of independent components to allow continuous integration and development.  
 The system can be easily integrated with already existing services. All those microservices are accessed thanks to a middleware that exposes a uniform API for the consumers.  
 The system, even if very simple in the beginning, can evolve to be very complex with very little effort and provide a variety of features and improvements.
