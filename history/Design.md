@@ -23,7 +23,7 @@ Possible future developments might be:
 </p>   
 
 __Hard Facts__ 
-Anand is a Mongolian curator of a famous museum. Growing up in Mongolia, he graduated in Cultural Heritage and after a long career he became curator. He is not a very technological man but he is lucky, he asked the Sapienza museum for a famous reproduction of a work of art giving consent to the remote monitoring of the rooms.
+Anand is a Mongolian curator of a famous museum. Growing up in Mongolia, he graduated in Cultural Heritage and after a long career he became curator. He is not a very technological man but he is lucky, he asked the Sapienza museum for a famous reproduction of a work of art giving consent to the remote monitoring of the rooms.  
 __Interest and Values__  
 He loves to read books at home at night as opposed to going out to  bars. He does like to hang out with a small group of friends at home or  at quiet coffee shops. He cares a lot about looks and  fashion.
 In an average day, he tends to drink many cups of American coffee, and he  usually cooks his own healthy dishes. He prefers organic food, however, he’s not always able to afford it.  
