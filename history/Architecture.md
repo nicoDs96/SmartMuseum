@@ -2,7 +2,7 @@
 
 ## High-Level Presentation 
 <p align="center">
-  <img height="50%" width="50%" src="./img/arch_4.png">
+  <img height="50%" width="50%" src="../img/arch_4.png">
 </p>   
 
 In principle, thanks to the dashboard, museum administrator will provide a description of the artworks and custom paths and they will be able to monitor live and historical traffic inside museum rooms.  Visitors will download the app, activate Bluetooth and they will be localized thanks to beacons. Beacons should be placed one in each room such that uncertainty regions (location where you are not sure the user is in one room or another) are minimized. The user will select its preferred language and the app will retrieve information (see [Design](./Design.md) for details of the UX). 
@@ -11,7 +11,7 @@ The system can be easily integrated with already existing services. All those mi
 
 
 ### Museum API
-The middleware API exposes all the museum services, it will allow visitors' app to retrieve informations of artworks or custom path and museum administrators' app to upload data assets and retrieve indoor traffic data ([API DOC](/doc/APIDOC.pdf)).
+The middleware API exposes all the museum services, it will allow visitors' app to retrieve informations of artworks or custom path and museum administrators' app to upload data assets and retrieve indoor traffic data.
 It is realized in Nodejs with the Express framework.
 
 ### Translation Engine
@@ -35,7 +35,7 @@ The broker will just collect data from the boards when published. As initial sol
 ## Components Interaction  
 
 <p align="center">
-  <img height="50%" width="50%" src="./img/Net-arch.png">
+  <img height="50%" width="50%" src="../img/Net-arch.png">
 </p>   
 
 With the current architecture, we only differentiate between two frontends (Mobile App, Museum Dashboard) and the backend. The backend choice between on-premise and cloud solutions will be discussed in the [evaluation](Evaluation.md) part. As initial solution we will propose to the museum to collect environmental data in aggregated from (for example avg min and max temperature of a given time range). Based on this proposal we decided to use LoRaWAN as comunication protocol. If more data are needed we might switch to mqtt/mqtt-sn and change the broker accordingly

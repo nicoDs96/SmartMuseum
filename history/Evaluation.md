@@ -20,13 +20,13 @@ According to the architecture we have described in the [Architecture file](Archi
 -  To store data we use simple storage service S3, with an estimate (see database section below) of 500GB per month of storage needed with 100 PUT and 10000 GET, 100 GB of retrived data each month and 500 GB of data scanned. Total: 13.22 $
 - Translation service: free
 <p align="center">
-  <img height="50%" width="50%" src="./img/AWScosts.png">
+  <img height="50%" width="50%" src="../img/AWScosts.png">
 </p>   
 
 The same configuration will be 100$ per month on Google cloud only for hosting the app, without considering storage.   
 With [Azure cost estimator](https://azure.microsoft.com/it-it/pricing/calculator/), instead, we have computed 36$ per month using azure data lake storage and app service.
 <p align="center">
-  <img height="50%" width="50%" src="./img/azureCosts.png">
+  <img height="50%" width="50%" src="../img/azureCosts.png">
 </p>   
 
 However, 500 GB is an estimate of storage of a very big museum. A more realistic scenario for the Sapienza Classical Art Museum is a required storage of about 50GB (see tables below). Hence the major cost would be the app hosting service (60$/mo. on AWS and 20$/mo on Azure). Here we can think to switch to MongoDB Cloud data storage service, called Atlas, with a cost of 0.25$/hour on avg. (AWS, Google, Azure) for 50 GB storage instance.   

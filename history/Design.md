@@ -1,6 +1,6 @@
 # Design
 According to [official Ministry of Education data](http://ustat.miur.it/dati/didattica/italia/atenei-statali/sapienza), Sapienza had more of 10.000 foreign students in 2018 from a variety of countries:
-![int data](./img/int-data.PNG)  
+![int data](../img/int-data.PNG)  
 During a meeting with museum managers it emerged that the majority of visitors of the museum are students both from Sapienza and outside (expecially art schools). Our idea to transform the Museum of Classical Art at Sapienza is to provide to users a completely digital guide inside the musem. The service will recognize the room in which the user is thanks to BLE Beacons and it will show to the user all the art pieces' descriptions, and digital content associated with the artwork (like audio description, videos etc...) in the room. The system will also allow users to get authomatic translation of the information retrived, in any language and will provide custom paths inside the museum.   
 In the meanwhile the museum's managers can (1) monitor traffic and crowding inside the museum, (2) optimize arrangement of artworks to avoid crowded rooms for example, (3) to understand which rooms and which operas get more attention, (4) track user movements for further advanced analysis, (5) sell digital pay-per-view content, (6) provide custom paths inside the musem according to some special criteria. Any modification of those digital content will be immediately available for users.    
   
@@ -16,7 +16,7 @@ Possible future developments might be:
 
 ### :pouting_man: Anand
 <p align="center">
-  <img height="60%" width="60%" src="./img/anand_summary.png">
+  <img height="60%" width="60%" src="../img/anand_summary.png">
 </p>   
 
 __Hard Facts__ 
@@ -39,7 +39,7 @@ __A Typical Day__
 
 ### :pouting_woman: Gabriella 
 <p align="center">
-  <img height="60%" width="60%" src="./img/gabriella_summary.png">
+  <img height="60%" width="60%" src="../img/gabriella_summary.png">
 </p>   
 __Hard Facts__   
 Gabriella is 54 years old curator of the Sapienza museum. She is Italian, she graduated in cultural heritage and then supported the master's degree in Conservation of Architectural and Environmental Heritage.
@@ -59,4 +59,4 @@ __A Typical Day__
 * She eats her lunch.  
 *  Afternoon shift at the museum, 2 pm.  
 * Then she come back at home at 6 am.  
-![Gabriella Storyboard](./img/gabriella_storyboard.png)
+![Gabriella Storyboard](../img/gabriella_storyboard.png)
