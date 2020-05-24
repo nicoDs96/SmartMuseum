@@ -6,6 +6,7 @@ This document is the second version of the Evaluation document for the SmartMuse
  <p align="center">
   <img src="img/Competitors.jpg">
 </p>   
+Observing the competitors, the differences, the weak points and the strong points of our idea emerged. Many competitors have decided to add a module for the detection of light, we have deemed this feature useless as we will have a web platform to monitor climatic conditions asynchronously and with human in the loop. Some ideas use excell sheets and personal computers for data processing while we will rely on a special backend and obviously the cloud. Another difference is the ability to monitor air quality  a feature that could be added in the future. The idea that comes closest to ours includes the use of actuators for room cooling but unlike us, it always transmits data in real time, obviously using a much higher amount of data than ours. Another of our strengths is the use of technologies for the monitoring of loaned works of art, none of the previous ideas allows the curators of the pieces of art to remotely monitor the quality of the environment in which the piece is located.
 
 ## User Experience Evaluation
 To evaluate the user experience we have designed a prototyper of the web dashboard (using Adobe XD Mockup software) and we have tested the usability of the product with some sample users.  
