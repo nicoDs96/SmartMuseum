@@ -1,10 +1,6 @@
 # Design
 
-# Competitors analysis:
 
- <p align="center">
-  <img src="img/Competitors.jpg">
-</p>   
 
 
 ## Personas :pouting_man: :pouting_woman:
