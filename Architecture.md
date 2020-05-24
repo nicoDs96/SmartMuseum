@@ -1,6 +1,6 @@
 # Architecture   
-This document is the second version of the architecture for the SmartMuseum project. The first version is in the [hisory folder](history/Architecture.md). Changes to the original architecture reflect the fact that our first project was too simple in core feature provided, not strictly related to the IoT field and also to wide. Here we decided to only focus on the specific indoor environment monitoring feature and the architecture reflects those changes. As in the frist project, the target is still very specific.
-
+This document is the second version of the architecture for the SmartMuseum project. The first version is in the [hisory folder](history/Architecture.md). Changes to the original architecture reflect the fact that our first project was too simple in core feature provided, not strictly related to the IoT field and also to wide. Here we decided to only focus on the specific indoor environment monitoring feature and the architecture reflects those changes. Also, here we give more attention to the IoT related architectural components.
+ 
 ## High-Level Presentation 
 <p align="center">
   <img height="50%" width="50%" src="img_new/arch.png">
@@ -11,6 +11,12 @@ On the backend, the key concept is to develop a microservice architecture to obt
 The system can be easily integrated with already existing services. All those microservices are accessed thanks to a middleware that exposes a uniform API for the consumers.  
 The system, even if very simple in the beginning, can evolve to be very complex with very little effort and provide a variety of features and improvements.
 
+### Nucleo Boards
+The Nucleo boards used are of two types. One used as gateway inside the museum is thought to be chosen either with integrated BLE and LoRa or with extension boards, it is a matter of costs principally. The other boards will be in charge of collecting environmental sensors data and to send them to the Gateway board. The gateway board will aggregate and send to the Broker and, based on the received measures, will control the actuators. From the broker, the Middleware will be in charge of consuming them and store them in the DB. The API will provide a uniform interface to clients to either real-time data (from the broker) and historical data (from DB).
+
+### Broker
+The broker will just collect data from the boards when published. As initial solution we will propose to the museum to collect environmental data in aggregated from (for example avg min and max temperature of a given time range). Based on this proposal we decided to use TheThingsNetwork and use their sdk to consume those data given their open source and free-to-use philosophy. Also this choice allows us to choose an energy saving policy for communication according to our needs.  
+In any case, the possibility to interact with a MQTT broker is also provided, so that when a more specific measure is needed we can require it. This solution, together with the possibility of on-demand billing offered by AWS allows us to make the solution sustainable. 
 
 ### Museum API
 The Middleware API exposes all the museum services, it will allow a transparent and uniform communication between things, database and dashboard. It will also easily allow to integrate new feature given its modularity structure.
@@ -22,13 +28,6 @@ It is a non-relational database that stores all information required. In the [ev
 
 ### Museum Dashboard
 Thanks to the dashboard, museum's administrator will be able to monitor environmental data to preserve artworks, both realtime and historical. They will have the possibility to define alert thresholds on measures, define thresholds for actuators and will have the possibility to switch to realtime monitoring in case of anomaly. The PoC will be realized in JavaScript and we will use Bootstrap 4 or similar technology to quickly build responsive layouts. For a production development we might think to use Flutter also for a web-based dashboard.
-
-### Nucleo Board
-The Nucleo boards used are of two types. One used as gateway inside the museum is thought to be chosen either with integrated BLE and LoRa or with extension boards, it is a matter of costs principally. The other boards will be in charge of collecting environmental sensors data and to send them to the Gateway board or to integrate actuators logic. The gateway board will aggregate and send to the Broker. From the broker, the Middleware will be in charge of consuming them and store them in the DB. The API will provide a uniform interface to clients to either real-time data (from the broker) and historical data (from DB).
-
-### Broker
-The broker will just collect data from the boards when published. As initial solution we will propose to the museum to collect environmental data in aggregated from (for example avg min and max temperature of a given time range). Based on this proposal we decided to use TheThingsNetwork and use their sdk to consume those data given their open source and free-to-use philosophy. Also this choice allows us to choose an energy saving policy for communication according to our needs.  
-In any case, the possibility to interact with a MQTT broker is also provided, so that when a more specific measure is needed we can require it. This solution, together with the possibility of on-demand billing offered by AWS allows us to make the solution sustainable. 
 
 ## Components Interaction  
 
