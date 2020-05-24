@@ -1,7 +1,7 @@
 # Design
 
 # Competitors analysis:
-![int data](../img/Competitors.jpg) 
+ ![int data](../img/Competitors.jpg) 
 
 
 ## Personas :pouting_man: :pouting_woman:
