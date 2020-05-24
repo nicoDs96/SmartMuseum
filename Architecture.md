@@ -2,7 +2,7 @@
 
 ## High-Level Presentation 
 <p align="center">
-  <img height="50%" width="50%" src="img/arch_4.png">
+  <img height="50%" width="50%" src="img_new/arch.png">
 </p>   
 
 In principle, this is a first step for the museum through a transition into intelligent and efficient management of its resources involving two strategic areas: asset preservation and energy efficiency. Indeed, artworks conservation is a key need for a museum as pointed out during the lecture with Sapienza Museum Experts. In the meanwhile, this activity can be performed in a very smart way with the help of IoT, hence sensors, actuators and the associated infrastructure, to reduce energy cost and to augment human awareness of the process thank to newest technologies.  

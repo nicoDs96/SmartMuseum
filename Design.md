@@ -6,7 +6,8 @@
 ### :pouting_woman: Gabriella 
 <p align="center">
   <img height="60%" width="60%" src="img/gabriella_summary.png">
-</p>   
+</p>    
+
 __Hard Facts__   
 Gabriella is 54 years old curator of the Sapienza museum. She is Italian, she graduated in cultural heritage and then supported the master's degree in Conservation of Architectural and Environmental Heritage.
 She is wife and mother of two children but above all a woman of great culture, she has an irrepressible passion for art since she was a child, she is also a great supporter of technologies in general but especially for those that  can be put at the service of her museum, in fact she would like to transform her museum into a smart museum making it as accessible and interactive as possible.  
