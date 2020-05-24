@@ -3,7 +3,7 @@
 # Competitors analysis:
 
  <p align="center">
-  <img height="60%" width="60%" src="img/Competitors.jpg">
+  <img src="img/Competitors.jpg">
 </p>   
 
 
