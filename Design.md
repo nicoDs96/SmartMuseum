@@ -54,5 +54,5 @@ __A Typical Day__
 * He continues to work.
 * He leaves for home at 6pm.  
 
-![Anand Storyboard](./img/anand_storyboardv2.png)
+
 
