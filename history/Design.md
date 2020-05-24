@@ -12,6 +12,9 @@ Possible future developments might be:
 - Do not force museum to use BLE beacons but provide a variety of oracles like QR codes, manual selection, AR tags or swipe among rooms for museum with forced routes. 
 - Integration with other classmate projects.
 
+# Competitors analysis:
+![int data](../img/Competitors.jpg) 
+
 ## Personas :pouting_man: :pouting_woman:
 
 ### :pouting_man: Anand
