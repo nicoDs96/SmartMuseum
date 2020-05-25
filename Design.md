@@ -1,5 +1,5 @@
 # Design
-This document is the second version of the design document for the SmartMuseum project. The first version is in the [hisory folder](history/Design.md). Changes to the original design reflect the fact that our first project was too simple in core feature provided, not strictly related to the IoT field and also to wide. Here we decided to only focus on the specific indoor environment monitoring feature. As in the frist project, since it was a strong point, the target is still very specific. In this document we revisit our target (that became musem curators only) and with a simple storyboard we illustrate what the product should offer.
+This document is the second version of the design document for the Smart Museum project. The first version is in the [history folder](history/Design.md). Changes to the original design reflect the fact that our first project was too simple in core feature provided, not strictly related to the IoT field and also to wide. Here we decided to only focus on the specific indoor environment monitoring feature. As in the first project, since it was a strong point, the target is still very specific. In this document we revisit our target (that became museum curators only) and with a simple storyboard we illustrate what the product should offer.
 
 
 
@@ -20,7 +20,7 @@ Gabriella loves watching movies and going out with her family on the weekend, es
 But when she wants time for her, she reads a nice book in the living room drinking tea and maybe thinking about some innovation for the museum.  
 
 __Home, internet and tech__   
-As already said gabriella is a fan of technology in fact her house is smart, all the appliances are smart: the lights, the television, the audio system, for example on Sunday morning she wakes up and asks Amazon alexa to put some relaxing music in the afternoon she asks alexa for a film to watch on smart TV and then she enjoys watching it with her family.  
+As already said Gabriella is a fan of technology in fact her house is smart, all the appliances are smart: the lights, the television, the audio system, for example on Sunday morning she wakes up and asks Amazon Alexa to put some relaxing music in the afternoon she asks Alexa for a film to watch on smart TV and then she enjoys watching it with her family.  
 
 __A Typical Day__   
 * Wake up at 7 am, breakfast with the family.  
