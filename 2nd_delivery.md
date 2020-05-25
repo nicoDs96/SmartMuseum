@@ -29,7 +29,7 @@ The architecture in its cloud composition does not changes much. Indeed we only 
 The evaluation document reflects the changes in the data model and in the data volume of the application. However the methodology and parameters remain the same.
 
 ## Currently Implemented Functionalities
-At the moment it has been developed the museum API, able to talk with AWS IoT Broker and TTN, DB interaction is a work in progress. The dashboard is available as a prototype. The Nucleo sensor reading part is ready too, the comunication process among boards and broker is work in progress. Actuators will be simulated since the impossibility to access to Museum spaces and know the available resources.
+At the moment it has been developed the museum API, able to talk with AWS IoT Broker and TTN, DB interaction is a work in progress. The dashboard is available as a mockup prototype. The Nucleo sensor reading part is ready too, the comunication process among boards and broker is work in progress. Actuators will be simulated since the impossibility to access to Museum spaces and know the available resources.
 
 ## Through the 3rd Delivery
 At the end the PoC will fully support environmental monitoring and only emulate actuators to adjust indoor microclimate. In detail we will provide:
