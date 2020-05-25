@@ -6,40 +6,30 @@ const MongoClient = require('mongodb').MongoClient;
 
 
 //TTN params  https://www.thethingsnetwork.org/docs/applications/nodejs/quick-start.html for doc
-var appID = ""
-var accessKey = ""
+//https://www.thethingsnetwork.org/docs/applications/nodejs/api.html
+var appID = "smart_museum";
+var accessKey = "ttn-account-v2.UwQYpQqxdt1Lz5jaNZyk94qLMy0hLZb4XzCDvRqjYD4";
 //AWS params
 var device = awsIot.device({
-    keyPath: '/home/pi/deviceSDK/certs/private.pem.key',
-    certPath: '/home/pi/deviceSDK/certs/certificate.pem.crt',
-    caPath: '/home/pi/deviceSDK/certs/caCert.crt',
-    clientId: '<YOUR THING NAME>',
-    host: 'end point '
+    keyPath: '/home/nicods/Scrivania/SmartMuseum/MuseumAPI/AWSCerts/station.private.key',
+    certPath: '/home/nicods/Scrivania/SmartMuseum/MuseumAPI/AWSCerts/station.cert.pem',
+    caPath: '/home/nicods/Scrivania/SmartMuseum/MuseumAPI/AWSCerts/root-CA.crt',
+    clientId: 'client',
+    host: 'a1czszdg9cjrm-ats.iot.us-east-1.amazonaws.com'
 });
-/*
-https://github.com/aws/aws-iot-device-sdk-js
+  
+// https://github.com/aws/aws-iot-device-sdk-js  see test/aws_iot_test.js for working example
 
-device.on(‘connect’, function() {    device.subscribe(‘LED’)   device.publish('topic_2', JSON.stringify({ test_data: 1})); });
-
-device.on(‘message’, function(topic, payload) {    
-    var payload = JSON.parse(payload.toString());
-    console.log();    
-    if(topic == ''){   } else {    }
-}
-*/
 
 //MongoDB dbUser dbUser
 // to connect to ATLAS without error configure the whitelist: https://docs.atlas.mongodb.com/tutorial/whitelist-connection-ip-address/
-const uri = "mongodb+srv://dbUser:<password>@cluster0-sa1g1.mongodb.net/test?retryWrites=true&w=majority";
+const uri = "mongodb+srv://dbUser:dbUser@cluster0-sa1g1.mongodb.net/test?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true });
 client.connect(err => {
   const collection = client.db("test").collection("devices");
   // perform actions on the collection object
   client.close();
 });
-
-
-
 
 
 app.use(express.json()); // for parsing application/json
@@ -49,11 +39,13 @@ app.get('/test', function (req, res) {
     res.send(JSON.stringify(testRes));
 });
 
-app.get('/state/:clientId', function (req, res) {
-    if( clientsActivity.has( req.params.clientId) ){
-        message = {
-            activity: clientsActivity.get(req.params.clientId)
-        }
+//get last hour stats of all the rooms (MAIN PAGE STATS)
+app.get('/stats/', function (req, res) {
+    if(  Number(req.params.clientId) > 0 ){
+        let room_nr = Number(req.params.clientId);
+        /*TODO
+        query the db and send the stats of the given room (historical and eventually live if available)
+        */
         res.type('application/json');
         res.status(200);
         res.send(JSON.stringify(message));
@@ -64,9 +56,40 @@ app.get('/state/:clientId', function (req, res) {
     
 });
 
+app.get('/stats/:roomId', function (req, res) {
+    if(  Number(req.params.clientId) > 0 ){
+        let room_nr = Number(req.params.clientId);
+        /*TODO
+        query the db and send the stats of the given room (historical and eventually live if available)
+        */
+        res.type('application/json');
+        res.status(200);
+        res.send(JSON.stringify(message));
+    }
+    else{
+        res.status(404).send({});
+    }
+    
+});
 
-app.post('/readings', function (req, res) {
+app.post('/thresholds/:roomId', function (req, res) {
     try {
+
+        if(  Number(req.params.clientId) > 0 ){
+            let room_nr = Number(req.params.clientId);
+            
+            /*TODO
+            - get body response
+            - update thresholds
+            - notify actuators
+            */
+            res.type('application/json');
+            res.status(200);
+            res.send(JSON.stringify(message));
+        }
+        else{
+            res.status(404).send({});
+        }
         
     }
     catch (e) {
