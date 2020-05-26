@@ -11,9 +11,9 @@ Observing the competitors, the differences, the weak points and the strong point
 ## User Experience Evaluation
 To evaluate the user experience we have designed a prototype of the web dashboard (using Adobe XD Mockup software) and we have tested the usability of the product with some sample users.  
 The prototype:  
-![](/img_new/dash_prototype.png)  
+![](img_new/dash_prototype.PNG)  
 And when clicking on a room we can have contextual actions and detailed measures.
-![](/img_new/dash_prototype2.png)  
+![](img_new/dash_prototype2.PNG)  
   
 Feedback:  
 Since the period is a bit tough and there are severe limitations to social life, we restricted testing to our familiars and some friend. They found the prototype intuitive and easy to use.  
