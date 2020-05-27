@@ -6,7 +6,7 @@ This document is the second version of the Evaluation document for the SmartMuse
  <p align="center">
   <img src="img_new/competitors.PNG">
 </p>   
-Observing the competitors, the differences, the weak points and the strong points of our idea emerged. Many competitors have decided to add a module for the detection of light, we have deemed this feature useless as we will have a web platform to monitor climatic conditions asynchronously and with human in the loop. Some ideas use excell sheets and personal computers for data processing while we will rely on a special backend and obviously the cloud. Another difference is the ability to monitor air quality  a feature that could be added in the future. The idea that comes closest to ours includes the use of actuators for room cooling but unlike us, it always transmits data in real time, obviously using a much higher amount of data than ours. Another of our strengths is the use of technologies for the monitoring of loaned works of art, none of the previous ideas allows the curators of the pieces of art to remotely monitor the quality of the environment in which the piece is located.
+Observing the competitors, the differences, the weak points and the strong points of our idea emerged. Many competitors have decided to add a module for the detection of light, we have deemed this feature useless as we will have a web platform to monitor climatic conditions asynchronously and with human in the loop. Some ideas use Excell sheets and personal computers for data processing while we will rely on a special backend and obviously the cloud. Another difference is the ability to monitor air quality  a feature that could be added in the future. The idea that comes closest to ours includes the use of actuators for room cooling but unlike us, it always transmits data in real time, obviously using a much higher amount of data than ours. Another of our strengths is the use of technologies for the monitoring of loaned works of art, none of the previous ideas allows the curators of the pieces of art to remotely monitor the quality of the environment in which the piece is located.
 
 ## User Experience Evaluation
 To evaluate the user experience we have designed a prototype of the web dashboard (using Adobe XD Mockup software) and we have tested the usability of the product with some sample users.  
@@ -21,7 +21,7 @@ As a general metodology to evaluate the system we have decided to use [think-alo
 
 ## Technical Evaluation
 We have decided to realize a backend microservice architecture to allow modularity and to make system evolution simple so that the application will be as long-lasting as possible, tolerant to changes, integrable with other projects from the course easily.  
-Due to Covid-19, we will test the product from a technical point of view using IoT-Lab Testbed for the indoor environmental condition monitoring since it provieds full support to LoRaWAN and also gave access to boards with environmental sensors. Indeed we could also use it to test Bluetooth messaging between boards.   
+Due to Covid-19, we will test the product from a technical point of view using IoT-Lab Testbed for the indoor environmental condition monitoring since it provieds full support to LoRaWAN and also gave access to boards with environmental sensors. 
   
 According to the architecture we have described in the [Architecture file](Architecture.md) we are going to compare costs of a solution cloud based and a solution on premise as well as required hardware costs. We assume project is open source hence no employee to pay.
 ### Cloud Hosting Costs 
@@ -52,8 +52,8 @@ If  the traffic in the museum is limited, me might think to deploy the museum ga
 For this prof of concept we will deploy a MongoDB instance with Atlas M0 tier (free tier for lifetime) with physical limitation of shared RAM and CPU and storage limit of 512MB. The app will be hosted locally.
  
 ### Required Hardware
-We will use some STM NUCLEO family board. They allows to measure at the same time temperature, relative air humidity, air pressure(only some boards). Also we can either buy an [extension board](https://www.st.com/en/ecosystems/x-nucleo-idb05a1.html) to support BLE or we can buy a [board with BLE integrated](https://www.st.com/en/evaluation-tools/b-l475e-iot01a.html). This means that this hardware is very useful also to scale the project and integrate with other projects since bluetooth is the core technology of most projects. We estimate one environmental sensor per room (but we should be able to use one of it for two room either and optimize costs). Then we require only one board with both LoRa and Bluetooth support to communicate those measurements to the cloud.
-
+We will use some STM NUCLEO family board. They allows to measure at the same time temperature, relative air humidity, air pressure(only some boards). To Support loRaWAN we can use an [extension board](https://www.st.com/en/evaluation-tools/i-nucleo-lrwan1.html).  
+We estimate one board per room (but we should be able to use one of it for two room either and optimize costs).
 
 ### Final Notes on Storage Volume Estimation
 Here a quick explanation on how we have evaluated storage requirements. 
