@@ -8,7 +8,15 @@ Smart Museum PoC App from Internet of Things course a.y. 2020 at Sapienza Univer
 ## Product Design Advisor
 - Camilla Gironi ([Linkedin](https://www.linkedin.com/in/camilla-gironi/))
 
-## The Idea
+# The Idea
+Briefly, this project now aims to become a first step for the museum through a transition into intelligent and efficient management of its resources involving two strategic areas: asset preservation and energy efficiency. Indeed, artworks conservation is a key need for a museum as pointed out during the lecture with Sapienza Museum Experts. In the meanwhile, this activity can be performed in a very smart way with the help of IoT, sensors, actuators, to reduce energy cost and to augment human awareness of the process thank to newest technologies.
+
+## Documents
+
+- [Design](/Design.md) providing details on the product/service from the user point of view
+- [Architecture](/Architecture.md) providing details on the technical aspects of the product/service, including a high-level presentation of the conceptual architecture of the software and hardware components that make up the product/service, a description of the main software/hardware components, how these components interact, a network architecture.
+- [Evaluation](/Evaluation.md) providing details on how to evaluate the product/service, (i) from a user experience point of view, (ii) from a technical point of view. The document describes the evaluation methodology for both the overall system as well as each individual components for the technical/user dimensions.
+
 
 # History
 this section contains all the inital work done before the pivot.
@@ -33,11 +41,3 @@ Possible future developments might be:
 - [Presentation Video](https://youtu.be/MkLeV74OjLE) of the product/idea and the evaluation plan and of the technical approach and architecture.
 - [Presentation PDF](/history/Presentation.pdf) of the product/idea and the evaluation plan and of the technical approach and architecture.
 
-
-# TO DO
-
-- [ ] Focus on indoor microclimate monitoring -> curator point of view
-- [ ] Modify Gabriella storyboard to reflect the focus on env. monitoring
-- [ ] Remove AR from architecture
-- [ ] Modify all diagrams (architecture.md) to reflect those changes
-- [ ] Change the evaluation.md accordingly (no more beacons, only LoRaWAN and curator dashboard, DB size shrinks)
