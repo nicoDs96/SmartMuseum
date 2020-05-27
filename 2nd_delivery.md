@@ -25,11 +25,11 @@ Briefly, this project now aims to become a first step for the museum through a t
 
 ## Design, Architecture, Evaluation Changes
 Since the target became only the Heritage Curators, now all our personas reflect those changes. The storyboard also represent the new features of the project.   
-The architecture in its cloud composition does not changes much. Indeed we only removed one service not required anymore. Since we focus only on environmental monitoring, we decided to add on-demand support for MQTT, so now the boards can thalk to TheThingsNetwork (TTN) in normal condition through LoRaWAN and can switch to MQTT using AWS IoT when the Curator need a more accurate view.   
-The evaluation document reflects the changes in the data model and in the data volume of the application. However the methodology and parameters remain the same.
+The architecture in its cloud composition does not changes much. Indeed we only removed one service not required anymore. Since we focus only on environmental monitoring, we decided to add on-demand support for MQTT, so now the boards can talk to TheThingsNetwork (TTN) in normal condition through LoRaWAN and can switch to MQTT using AWS IoT when the Curator need a more accurate view.   
+The evaluation document reflects the changes in the data model and in the data volume of the application. However the methodology and parameters remain the same. Some User Experience evaluation metric is added: the Think Aloud interview. Also we have analyzed the competitors and we made a brief comparison of features offered. A summary of the hardware is provided as well as a cost evaluation. 
 
 ## Currently Implemented Functionalities
-At the moment it has been developed the museum API, able to talk with AWS IoT Broker and TTN, DB interaction is a work in progress. The dashboard is available as a mockup prototype. The Nucleo sensor reading part is ready too, the communication process among boards and broker is work in progress. Actuators will be simulated since the impossibility to access to Museum spaces and know the available resources.
+At the moment it has been developed the museum API, able to talk with AWS IoT Broker and TTN, while DB interaction is a work in progress. The dashboard is available as a mockup prototype. The Nucleo sensor reading part is ready too, the communication process among boards and broker is work in progress. Actuators will be simulated since the impossibility to access to Museum spaces and know the available resources.
 
 ## Through the 3rd Delivery
 At the end the PoC will fully support environmental monitoring and only emulate actuators to adjust indoor microclimate. In detail we will provide:
@@ -37,4 +37,6 @@ At the end the PoC will fully support environmental monitoring and only emulate 
 2. the possibility to send measures to the cloud with LoRaWAN using TheThingsNetwork infrastructure;
 3. the possibility to switch to MQTT on-demand and have real time monitoring and then switch back to LoRaWAN less frequent messages;
 4. persistent storage;
-5. interactive web dashboard.
+5. interactive web dashboard.  
+At the end we expect also to provide detailed description of network latency in realtime mode and we aim to adjust the transmission rate according to the measured latency. Indeed if we need to measure each 0.05 seconds but the messages takes 1.5 seconds to arrive, the best solution might be to send one message each 1.5 seconds with a list of measurements at frequency of 0.05 seconds as payload.  
+We expect also to provide some energy consumption statistics of our hardware.
