@@ -6,8 +6,21 @@ const MongoClient = require('mongodb').MongoClient;
 
 
 //TTN params  https://www.thethingsnetwork.org/docs/applications/nodejs/quick-start.html for doc
-var appID = ""
-var accessKey = ""
+var appID = "smart_museum"
+var accessKey = "ttn-account-v2.UwQYpQqxdt1Lz5jaNZyk94qLMy0hLZb4XzCDvRqjYD4"
+ttn.data(appID, accessKey)
+  .then(function (client) {
+    client.on("uplink", function (devID, payload) {
+      console.log("Received uplink from ", devID)
+      console.log(payload)
+    })
+  })
+  .catch(function (error) {
+    console.error("Error", error)
+    process.exit(1)
+  })
+
+
 //AWS params
 var device = awsIot.device({
     keyPath: '/home/pi/deviceSDK/certs/private.pem.key',
