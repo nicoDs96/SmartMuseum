@@ -1,16 +1,15 @@
 # name of your application
-APPLICATION = saul_test
+APPLICATION = museum_boards
 
 # If no BOARD is found in the environment, use this default:
-BOARD ?= native
-
+BOARD ?= iotlab-m3
+# if no other driver is specified
+DRIVER ?= lps331ap
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../..
 
 BOARD_INSUFFICIENT_MEMORY := arduino-duemilanove arduino-nano arduino-uno
 
-# we want to use SAUL:
-USEMODULE += saul_default
 # include the shell:
 USEMODULE += shell
 USEMODULE += shell_commands
@@ -18,6 +17,8 @@ USEMODULE += shell_commands
 USEMODULE += ps
 #TIMING
 USEMODULE += xtimer
+#Sensors
+USEMODULE += $(DRIVER)
 
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
