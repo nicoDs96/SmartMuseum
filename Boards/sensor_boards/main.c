@@ -8,8 +8,8 @@ SAUL TEST
 #include "shell.h"
 #include "thread.h"
 #include "xtimer.h"
-#include "lps331ap.h" //sensors driver 
-#include "lps331ap_params.h" //sensors driver 
+#include "lpsxxx.h"
+#include "lpsxxx_params.h"
 #include "read_sensors.h"
 
 
@@ -29,28 +29,32 @@ void *thread_handler(void *arg)
     return NULL;
 }
 
-int read_sensors(int *pres, int *temp)
+int read_sensors(uint16_t *pres, int16_t *temp)
 {
    
-    static lps331ap_t dev;
-    
-    if (lps331ap_init(&dev, &lps331ap_params[0]) != 0) {
+    lpsxxx_t dev;
+    printf("Test application for %s pressure sensor\n\n", LPSXXX_SAUL_NAME);
+    printf("Initializing %s sensor\n", LPSXXX_SAUL_NAME);
+    if (lpsxxx_init(&dev, &lpsxxx_params[0]) != LPSXXX_OK) {
         puts("Initialization failed");
         return READ_FAIL;
     }
 
-    lps331ap_enable(&dev);
+    lpsxxx_enable(&dev);
     xtimer_sleep(1); /* wait a bit for the measurements to complete */
 
-    *temp = lps331ap_read_temp(&dev); //temp and pres are already pointers
-    *pres = lps331ap_read_pres(&dev);
-    lps331ap_disable(&dev); //do not waste energy, disable sensors after measurements
+    lpsxxx_read_temp(&dev,temp); //temp and pres are already pointers
+    lpsxxx_read_pres(&dev,pres);
+    lpsxxx_disable(&dev); //do not waste energy, disable sensors after measurements
 
-    int temp_abs = *temp / 100;
+    printf("Pressure value: %ihPa - Temperature(RAW): %d °C \n",
+           *pres, *temp);
+
+    /*int temp_abs = *temp / 100;
     *temp -= temp_abs * 100;
 
     printf("Pressure value: %ihPa - Temperature: %2i.%02i°C\n",
-           *pres, temp_abs, *temp);
+           *pres, temp_abs, *temp);*/
            
     return READ_OK;
 }
@@ -59,8 +63,8 @@ static int cmd_test_sensors(int argc, char **argv)
 {
     (void)argc;
     (void)argv; 
-    int temp;
-    int pres;   
+    int16_t temp;
+    uint16_t pres;   
     if( read_sensors(&pres, &temp) == READ_FAIL){ //error reading
             puts("Unable to read sensors at this round. Not sending anything.\n");
             
@@ -73,8 +77,13 @@ static int cmd_test_sensors(int argc, char **argv)
 
         //define the message as a string and print values in the message string
         char message[200];
-        sprintf(message, "{\"station_id\":\"%s\",\"timestamp\":\"%s\",\"temperature\":%d,\"pres\":%d}",
-                 "stat_1",date_time,temp,pres);
+
+        //split the raw temperature value into integer part and decimal part
+        int temp_abs = temp / 100;
+        temp -= temp_abs * 100;
+
+        sprintf(message, "{\"station_id\":\"%s\",\"timestamp\":\"%s\",\"temperature\":%2i.%02i,\"pres\":%d}",
+                 "stat_1",date_time,temp_abs,temp,pres);
         
         //Print  data.
         
