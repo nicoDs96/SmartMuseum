@@ -2,7 +2,7 @@
 APPLICATION = museum_boards
 
 # If no BOARD is found in the environment, use this default:
-BOARD ?= iotlab-m3
+BOARD ?= b-l072z-lrwan1
 # if no other driver is specified
 DRIVER ?= lps331ap
 # This has to be the absolute path to the RIOT base directory:
@@ -19,6 +19,14 @@ USEMODULE += ps
 USEMODULE += xtimer
 #Sensors
 USEMODULE += $(DRIVER)
+#LoRa
+LORA_DRIVER ?= sx1276
+USEPKG += semtech-loramac
+USEMODULE += $(LORA_DRIVER)
+USEMODULE += semtech_loramac_rx
+CFLAGS += -DREGION_$(LORA_REGION)
+CFLAGS += -DLORAMAC_ACTIVE_REGION=LORAMAC_REGION_$(LORA_REGION)
+
 
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
