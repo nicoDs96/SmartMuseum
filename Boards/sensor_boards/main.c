@@ -13,9 +13,19 @@
 
 static msg_t _recv_queue[RECV_MSG_QUEUE];
 static char _recv_stack[THREAD_STACKSIZE_DEFAULT];
-
 char stack[THREAD_STACKSIZE_MAIN];
-
+/* 
+define the required keys for OTAA, e.g over-the-air activation (the
+null arrays need to be updated with valid LoRa values) 
+*/
+static const uint8_t deveui[LORAMAC_DEVEUI_LEN] = {0x00, 0x8B, 0x51, 0x44,
+                                                   0x3D, 0x92, 0xFC, 0x6F};
+static const uint8_t appeui[LORAMAC_APPEUI_LEN] = {0x70, 0xB3, 0xD5, 0x7E,
+                                                   0xD0, 0x02, 0xD5, 0x8A};
+static const uint8_t appkey[LORAMAC_APPKEY_LEN] = {0xD1, 0x4D, 0x14, 0xAC,
+                                                   0x89, 0xA4, 0xF8, 0x03,
+                                                   0x02, 0x31, 0x07, 0x50,
+                                                   0x89, 0x78, 0x8A, 0x84};
 /* The loramac stack device descriptor */
 semtech_loramac_t loramac;
 
@@ -113,8 +123,8 @@ int connect(void)
     semtech_loramac_set_deveui(&loramac, deveui);
     semtech_loramac_set_appeui(&loramac, appeui);
     semtech_loramac_set_appkey(&loramac, appkey);
-    /* 2.1 setting device rate */
-    semtech_loramac_set_dr(&loramac, DEVICE_RATE);
+    /* 2.1 setting device tx power */
+    semtech_loramac_set_tx_power(&loramac, DEVICE_POWER);
     /* 3. join the network */
     if (semtech_loramac_join(&loramac, LORAMAC_JOIN_OTAA) != SEMTECH_LORAMAC_JOIN_SUCCEEDED)
     {
@@ -125,17 +135,6 @@ int connect(void)
     return CONNECTION_OK;
 }
 
-/*
-returns:
- - char[] date_time: the current (local) datetime in format 'yyyy-mm-dd hh:mm:ss'
-*/
-char[] get_curr_datetime(void){
-    char date_time[30];
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    sprintf(date_time,"%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    return date_time;
-}
 
 static int cmd_test_sensors(int argc, char **argv)
 {
@@ -144,13 +143,58 @@ static int cmd_test_sensors(int argc, char **argv)
     int16_t temp;
     uint16_t pres;   
     if( read_sensors(&pres, &temp) == READ_FAIL){ //error reading
-            puts("Unable to read sensors at this round. Not sending anything.\n");
+        puts("Unable to read sensors at this round. Testing LoRa Only.\n");
+
+
+        puts("LoRaMAC test start: ...\n");
+        //Get the current time
+        char date_time[30];
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+        sprintf(date_time,"%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        
+        //define the message as a string and print values in the message string
+        char message[200];
+        temp = 3366;
+        pres = 1000;
+        
+        //split the raw temperature value into integer part and decimal part
+        int temp_abs = temp / 100;
+        temp -= temp_abs * 100;
+
+        sprintf(message, "{\"station_id\":\"%s\",\"timestamp\":\"%s\",\"temperature\":%2i.%02i,\"pres\":%d}",
+                 "stat_1",date_time,temp_abs,temp,pres);
+        
+        //Print  data (DEBUG) TODO: removeit.
+        puts("--------------------------------\n\n");
+        printf("Values Read:\n%s\n",message);
+        puts("\n\n--------------------------------\n");
+        
+        /*
+        TEST LORA 
+        */
+        if(connect()==CONNECTION_FAILED){
+           puts("LORA connection failed");
+           return CONNECTION_FAILED;
+        }
+        uint8_t return_code = semtech_loramac_send(&loramac, (uint8_t *)message, strlen(message) ); 
+        if(return_code != SEMTECH_LORAMAC_TX_DONE){
+            puts("PUB FAILURE:\n");
+            print_lora_pub_error(return_code); // for debug purposes
+            return PUB_FAIL;
+        }
+
+        thread_create(_recv_stack, sizeof(_recv_stack), THREAD_PRIORITY_MAIN - 1, 0, _recv, NULL, "recv thread");
+
+            
             
     }else{ //read sensor ok then print data
         
         //Get the current time
         char date_time[30];
-        date_time = get_curr_datetime();
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+        sprintf(date_time,"%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         
         //define the message as a string and print values in the message string
         char message[200];
@@ -170,7 +214,7 @@ static int cmd_test_sensors(int argc, char **argv)
         /*
         TEST LORA 
         */
-        if(connect(&loramac)==CONNECTION_FAILED){
+        if(connect()==CONNECTION_FAILED){
            puts("LORA connection failed");
            return CONNECTION_FAILED;
         }
