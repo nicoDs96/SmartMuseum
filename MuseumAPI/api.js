@@ -3,6 +3,7 @@ var app = express();
 var ttn = require('ttn');
 var awsIot = require('aws-iot-device-sdk');
 const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
 
 
 //TTN params  https://www.thethingsnetwork.org/docs/applications/nodejs/quick-start.html for doc
@@ -97,6 +98,60 @@ app.post('/thresholds/:roomId', function (req, res) {
         res.status(500).send("500 - Internal Error");
     }
 
+});
+
+app.get('/testDB/', async  (req, res) => {
+   try{
+       let uriiii= "mongodb+srv://dbUser:dbUser@cluster0-sa1g1.mongodb.net/test?retryWrites=true&w=majority"
+        const client = await new MongoClient("mongodb://localhost:27017", useUnifiedTopology=true);
+
+        // Use connect method to connect to the Server
+        client.connect((err) => {
+            //assert.equal(null, err);
+            console.log("Connected successfully to server");
+            const db = client.db("SmartMuseum");
+
+            // perform actions on the collection object
+            myobj = [];
+
+            for(i=0;i<10;i++){
+                
+                let room = { 
+                    Room: 1,
+                    Tem_min: 18.1,
+                    Tem_max: 27.8,
+                    Tem_avg: 24.6,
+                    Hum_min: 18.1,
+                    Hum_max: 27.8,
+                    Hum_avg: 24.6,
+                    realtime:false
+                    };
+                room["datetime"]=new Date().toLocaleString(); 
+               
+                //collection.insertOne(room);
+                db.collection("Rooms").insertOne(room, (err, r) => {
+                    assert.equal(null, err);
+                    assert.equal(1, r.insertedCount);
+                });
+                    
+            }
+            
+            client.close();
+        });
+        
+        
+        
+        client.close();
+      
+    
+        res.type('application/json');
+        res.status(200);
+        res.send(JSON.stringify(message));
+    }
+    catch{
+        res.status(404).send({});
+    }
+    
 });
 
 
