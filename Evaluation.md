@@ -70,7 +70,8 @@ Tem_avg: 24.6,
 Hum_min: 18.1,
 Hum_max: 27.8,
 Hum_avg: 24.6,
-datetime: 05-06-20 09:14:22
+datetime: 05-06-20 09:14:22,
+realtime:false
 }
 ```
 
