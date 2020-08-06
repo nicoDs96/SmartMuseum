@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include <math.h>
 #include "shell.h"
 #include "thread.h"
 #include "xtimer.h"
@@ -29,17 +28,6 @@ static const uint8_t appkey[LORAMAC_APPKEY_LEN] = {0xD1, 0x4D, 0x14, 0xAC,
                                                    0x89, 0x78, 0x8A, 0x84};
 /* The loramac stack device descriptor */
 semtech_loramac_t loramac;
-
-/* Globals data structure used to measure and send aggregated data */
-int16_t T_MIN=30000;
-int16_t T_MAX=-30000;
-uint16_t P_MIN=65000;
-uint16_t P_MAX=0;
-int8_t WINDOW_SIZE = 30; //send each 3 sec if sleep time is 100 ms
-float TMP_AGG = 0;
-float PRS_AGG = 0;
-int8_t w_i = 0;
-bool REALTIME = false;
 
 /*
 Prints in the std out the cause of PUB_FAIL in pub_msg function
@@ -147,139 +135,113 @@ int connect(void)
     return CONNECTION_OK;
 }
 
-char* compose_message(){
-    //Get the current time
-    char date_time[30];
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    sprintf(date_time,"%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    
-    //define the message as a string and print values in the message string
-    char message[200];
 
-    //split the raw temperature value into integer part and decimal part
-    int temp_agg_abs = TMP_AGG / 100;
-    int temp_agg_dec = TMP_AGG - temp_agg_abs * 100;
-
-    int temp_min_abs = T_MIN / 100;
-    int temp_min_dec = T_MIN - temp_min_abs * 100;
-
-    int temp_max_abs = T_MAX / 100;
-    int temp_max_dec = T_MAX - temp_max_abs * 100;
-
-
-    sprintf(message, "{\"room_id\":\"%s\",\"timestamp\":\"%s\",\"tmp_avg\":%2i.%02i,\"tmp_max\":%2i.%02i,\"tmp_min\":%2i.%02i,\"prs_avg\":%d,\"prs_min\":%d,\"prs_max\":%d}",
-                "1",date_time, temp_agg_abs, temp_agg_dec, temp_min_abs, temp_min_dec, temp_max_abs,temp_max_dec, PRS_AGG, P_MIN, P_MAX);
-
-    return message;
-    
-}
-
-/*
-PRE: execute connect() funciton to initialize lora 
-*/
-int send_lora(){
-    
-    char message[200];
-    message = compose_message;
-
-    //Print  data (DEBUG) 
-    //TODO: remove it.
-    printf("Sending message:\n%s\n\n",message);
-   
-    uint8_t return_code = semtech_loramac_send(&loramac, (uint8_t *)message, strlen(message) ); 
-    if(return_code != SEMTECH_LORAMAC_TX_DONE){
-        puts("PUB FAILURE:\n");
-        print_lora_pub_error(return_code); // for debug purposes
-        return PUB_FAIL;
-    }
-
-}
-
-int send_mqtt(){
-    
-}
-
-int send_data(){
-    return REALTIME ? send_mqtt() : send_lora();
-}
-
-
-/*
-Read Sensors loop (thread)
-Parameters: 
-- [in] arg: not used, every parameter passed will be ignored
-- [global] WINDOW_SIZE size of the window.
-- [global] TMP_AGG temperature aggregate values
-- [global] PRS_AGG air pressure aggregate values
-- [global] w_i counter of measures, if w_i%WINDOW_SIZE==0 send data to the server
-- [global] T_MIN temperature minimum
-- [global] T_MAX temperature maximum
-- [global] P_MIN air pressure minimum
-- [global] P_MAX air pressure maximum
-*/
-static void *compose_window(void *arg)
+static int cmd_test_sensors(int argc, char **argv)
 {
+    (void)argc;
     (void)argv; 
-    //TODO: 1. read sensors
-    //      2. update aggregate values
-    //      3. if window is complete send data
-    //      4. sleep (100 ms).
-    while(1){
+    int16_t temp;
+    uint16_t pres;   
+    if( read_sensors(&pres, &temp) == READ_FAIL){ //error reading
+        puts("Unable to read sensors at this round. Testing LoRa Only.\n");
 
-        int16_t temp;
-        uint16_t pres;   
-        if( read_sensors(&pres, &temp) == READ_FAIL){ 
-            // TODO: error reading sleep and print error in the console (assuming this is a very rare fault so ignore it)
-            // without any counter upgrade
-        }else{
-            TMP_AGG += temp/WINDOW_SIZE;
-            PRS_AGG += pres/WINDOW_SIZE;
-            if( T_MIN > temp || T_MIN==NAN ){ T_MIN = temp; }
-            if( T_MAX < temp || T_MAX==NAN ){ T_MAX = temp; }
-            if( P_MIN > pres || P_MIN==NAN ){ P_MIN = pres; }
-            if( P_MAX < pres || P_MAX==NAN ){ P_MAX = pres; }
 
-            ++w_i;
-            
-            if( w_i%WINDOW_SIZE==0 ){
-                send_data();
-                w_i=0;
-                T_MIN=30000;
-                T_MAX=-30000;
-                P_MIN=65000;
-                P_MAX=0;
-                TMP_AGG = 0;
-                PRS_AGG = 0;
-            }
+        puts("LoRaMAC test start: ...\n");
+        //Get the current time
+        char date_time[30];
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+        sprintf(date_time,"%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        
+        //define the message as a string and print values in the message string
+        char message[200];
+        temp = 3366;
+        pres = 1000;
+        
+        //split the raw temperature value into integer part and decimal part
+        int temp_abs = temp / 100;
+        temp -= temp_abs * 100;
+
+        sprintf(message, "{\"station_id\":\"%s\",\"timestamp\":\"%s\",\"temperature\":%2i.%02i,\"pres\":%d}",
+                 "stat_1",date_time,temp_abs,temp,pres);
+        
+        //Print  data (DEBUG) TODO: removeit.
+        puts("--------------------------------\n\n");
+        printf("Values Read:\n%s\n",message);
+        puts("\n\n--------------------------------\n");
+        
+        /*
+        TEST LORA 
+        */
+        if(connect()==CONNECTION_FAILED){
+           puts("LORA connection failed");
+           return CONNECTION_FAILED;
         }
-        xtimer_usleep(100000);//1 microsecond (us) = 10^(-6) seconds -> 100 ms = 100000 us
+        uint8_t return_code = semtech_loramac_send(&loramac, (uint8_t *)message, strlen(message) ); 
+        if(return_code != SEMTECH_LORAMAC_TX_DONE){
+            puts("PUB FAILURE:\n");
+            print_lora_pub_error(return_code); // for debug purposes
+            return PUB_FAIL;
+        }
+
+        thread_create(_recv_stack, sizeof(_recv_stack), THREAD_PRIORITY_MAIN - 1, 0, _recv, NULL, "recv thread");
+
+            
+            
+    }else{ //read sensor ok then print data
+        
+        //Get the current time
+        char date_time[30];
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+        sprintf(date_time,"%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        
+        //define the message as a string and print values in the message string
+        char message[200];
+
+        //split the raw temperature value into integer part and decimal part
+        int temp_abs = temp / 100;
+        temp -= temp_abs * 100;
+
+        sprintf(message, "{\"station_id\":\"%s\",\"timestamp\":\"%s\",\"temperature\":%2i.%02i,\"pres\":%d}",
+                 "stat_1",date_time,temp_abs,temp,pres);
+        
+        //Print  data (DEBUG) TODO: removeit.
+        puts("--------------------------------\n\n");
+        printf("Values Read:\n%s\n",message);
+        puts("\n\n--------------------------------\n");
+        
+        /*
+        TEST LORA 
+        */
+        if(connect()==CONNECTION_FAILED){
+           puts("LORA connection failed");
+           return CONNECTION_FAILED;
+        }
+        uint8_t return_code = semtech_loramac_send(&loramac, (uint8_t *)message, strlen(message) ); 
+        if(return_code != SEMTECH_LORAMAC_TX_DONE){
+            puts("PUB FAILURE:\n");
+            print_lora_pub_error(return_code); // for debug purposes
+            return PUB_FAIL;
+        }
+
+        thread_create(_recv_stack, sizeof(_recv_stack), THREAD_PRIORITY_MAIN - 1, 0, _recv, NULL, "recv thread");
+
     }
-    
-    return NULL;
-}
 
-
-
-static int cmd_start_sensors(int argc, char **argv)
-{
-    // 1. init connections
-    if(connect==CONNECTION_OK){
-         // 2. start thread   
-    }
-    
+    return 0;
 }
 
 
 static const shell_command_t shell_commands[] = {
-        {"start_sensor", "Read sensors, send their values and print values in the console.",cmd_start_sensors},
+        {"test_sensor", "Read sensors without sending their values and print values in the console. Test LoRaWAN send and receive loops",cmd_test_sensors},
         { NULL, NULL, NULL }
 };
 
 int main(void)
 {
     puts("Welcome to RIOT!\n");
-    puts("Type `help` for help, Type `start_sensor` to star measuring.\n");
+    puts("Type `help` for help, type `saul` to see all SAUL devices\n");
 
     char line_buf[SHELL_DEFAULT_BUFSIZE];
     shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
