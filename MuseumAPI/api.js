@@ -24,14 +24,8 @@ var device = awsIot.device({
 
 //MongoDB dbUser dbUser
 // to connect to ATLAS without error configure the whitelist: https://docs.atlas.mongodb.com/tutorial/whitelist-connection-ip-address/
-const uri = "mongodb+srv://dbUser:dbUser@cluster0-sa1g1.mongodb.net/test?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true });
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  client.close();
-});
-
+const uri = "mongodb+srv://dbUser:dbUser@cluster0-sa1g1.mongodb.net/SmartMuseum?retryWrites=true&w=majority";//"mongodb+srv://dbUser:dbUser@cluster0-sa1g1.mongodb.net/test?retryWrites=true&w=majority";
+var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(express.json()); // for parsing application/json
 
@@ -102,12 +96,13 @@ app.post('/thresholds/:roomId', function (req, res) {
 
 app.get('/testDB/', async  (req, res) => {
    try{
-       let uriiii= "mongodb+srv://dbUser:dbUser@cluster0-sa1g1.mongodb.net/test?retryWrites=true&w=majority"
-        const client = await new MongoClient("mongodb://localhost:27017", useUnifiedTopology=true);
+        //let urii ="mongodb://localhost:27017";
+        //let urii= "mongodb+srv://dbUser:dbUser@cluster0-sa1g1.mongodb.net/SmartMuseum?retryWrites=true&w=majority"
+    
 
         // Use connect method to connect to the Server
-        client.connect((err) => {
-            //assert.equal(null, err);
+        await client.connect( async err => {
+            assert.equal(null, err);
             console.log("Connected successfully to server");
             const db = client.db("SmartMuseum");
 
@@ -129,21 +124,17 @@ app.get('/testDB/', async  (req, res) => {
                 room["datetime"]=new Date().toLocaleString(); 
                
                 //collection.insertOne(room);
-                db.collection("Rooms").insertOne(room, (err, r) => {
+                await db.collection("Rooms").insertOne(room, (err, r) => {
                     assert.equal(null, err);
                     assert.equal(1, r.insertedCount);
                 });
                     
             }
             
-            client.close();
         });
-        
-        
-        
+
         client.close();
       
-    
         res.type('application/json');
         res.status(200);
         res.send(JSON.stringify(message));
