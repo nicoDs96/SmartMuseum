@@ -147,15 +147,12 @@ int connect(void)
     return CONNECTION_OK;
 }
 
-char* compose_message(){
+void compose_message(char *message){
     //Get the current time
     char date_time[30];
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
     sprintf(date_time,"%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    
-    //define the message as a string and print values in the message string
-    char message[200];
 
     //split the raw temperature value into integer part and decimal part
     int temp_agg_abs = TMP_AGG / 100;
@@ -168,24 +165,23 @@ char* compose_message(){
     int temp_max_dec = T_MAX - temp_max_abs * 100;
 
 
-    sprintf(message, "{\"room_id\":\"%s\",\"timestamp\":\"%s\",\"tmp_avg\":%2i.%02i,\"tmp_max\":%2i.%02i,\"tmp_min\":%2i.%02i,\"prs_avg\":%d,\"prs_min\":%d,\"prs_max\":%d}",
+    sprintf(*message, "{\"room_id\":\"%s\",\"timestamp\":\"%s\",\"tmp_avg\":%2i.%02i,\"tmp_max\":%2i.%02i,\"tmp_min\":%2i.%02i,\"prs_avg\":%f,\"prs_min\":%d,\"prs_max\":%d}",
                 "1",date_time, temp_agg_abs, temp_agg_dec, temp_min_abs, temp_min_dec, temp_max_abs,temp_max_dec, PRS_AGG, P_MIN, P_MAX);
-
-    return message;
-    
+ 
 }
 
 /*
 PRE: execute connect() funciton to initialize lora 
 */
-int send_lora(){
+int send_lora(void){
     
     char message[200];
-    message = compose_message;
+    compose_message(&message);
 
     //Print  data (DEBUG) 
     //TODO: remove it.
     printf("Sending message:\n%s\n\n",message);
+    printf("strlen(message):\n%d\n\n",strlen(message));
    
     uint8_t return_code = semtech_loramac_send(&loramac, (uint8_t *)message, strlen(message) ); 
     if(return_code != SEMTECH_LORAMAC_TX_DONE){
@@ -193,14 +189,16 @@ int send_lora(){
         print_lora_pub_error(return_code); // for debug purposes
         return PUB_FAIL;
     }
+    return (int)return_code;
 
 }
 
-int send_mqtt(){
-    
+int send_mqtt(void){
+    puts("Soon available");
+    return 1;
 }
 
-int send_data(){
+int send_data(void){
     return REALTIME ? send_mqtt() : send_lora();
 }
 
@@ -218,10 +216,10 @@ Parameters:
 - [global] P_MIN air pressure minimum
 - [global] P_MAX air pressure maximum
 */
-static void *compose_window(void *arg)
+void *compose_window(void *arg)
 {
-    (void)argv; 
-    //TODO: 1. read sensors
+    (void)arg; 
+    //      1. read sensors
     //      2. update aggregate values
     //      3. if window is complete send data
     //      4. sleep (100 ms).
@@ -263,10 +261,18 @@ static void *compose_window(void *arg)
 
 static int cmd_start_sensors(int argc, char **argv)
 {
+    (void)argc;
+    (void)argv;
     // 1. init connections
-    if(connect==CONNECTION_OK){
-         // 2. start thread   
+    if(connect()==CONNECTION_OK){
+         // 2. start threads   
+        thread_create(_recv_stack, sizeof(_recv_stack), THREAD_PRIORITY_MAIN - 1, 0, _recv, NULL, "recv thread"); //receive thread
+        thread_create(stack, sizeof(stack), THREAD_PRIORITY_MAIN + 1, THREAD_CREATE_STACKTEST, compose_window, NULL, "thread");//send messages thread
+        return 0;
+    }else{
+        puts("connection error.\n EXIT 1");
     }
+    return 1;
     
 }
 

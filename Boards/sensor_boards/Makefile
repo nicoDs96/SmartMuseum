@@ -2,19 +2,19 @@
 APPLICATION = museum_boards
 
 # If no BOARD is found in the environment, use this default:
-BOARD ?= esp32-heltec-lora32-v2
+BOARD ?= esp32-heltec-lora32-v2  #b-l072z-lrwan1
 # if no other driver is specified
 DRIVER ?= lps331ap
 # This has to be the absolute path to the RIOT base directory:
-RIOTBASE ?= /home/nicods/Scrivania/SmartMuseum/Boards/RIOT
+RIOTBASE ?= /home/nicods/Scrivania/SmartMuseum/Boards/RIOT   #$(CURDIR)/../../
 
 #OLED SCREEN MODULE
-USEPKG += u8g2
+#USEPKG += u8g2
 
 #WIFI Module
-USEMODULE += esp_wifi
-CFLAGS += -DESP_WIFI_SSID=\"D-Link-5544FC\"
-CFLAGS += -DESP_WIFI_PASS=\"xGSVxnnyYh\"
+#USEMODULE += esp_wifi
+#CFLAGS += -DESP_WIFI_SSID=\"D-Link-5544FC\"
+#CFLAGS += -DESP_WIFI_PASS=\"xGSVxnnyYh\"
 #CFLAGS += -DESP_WIFI_SSID=\"dsnetwork-TIM-31161311\"
 #CFLAGS += -DESP_WIFI_PASS=\"DiSaNtONM\"
 
