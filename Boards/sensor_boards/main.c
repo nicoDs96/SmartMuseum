@@ -11,10 +11,25 @@
 #include "lora_util.h"
 #include "net/loramac.h"
 #include "semtech_loramac.h"
+#include "net/emcute.h" // https://doc.riot-os.org/emcute_8h.html#
+#include "net/ipv6/addr.h"
 
+//MQTT defs
+#define EMCUTE_PORT         (1883U)
+#define EMCUTE_ID           ("room_1")
+#define EMCUTE_PRIO         (THREAD_PRIORITY_MAIN - 1)
+
+#define NUMOFSUBS           (16U)
+#define TOPIC_MAXLEN        (64U)
+
+static msg_t queue[8];
+
+static emcute_sub_t subscriptions[NUMOFSUBS];
+
+//Lora defs
 static msg_t _recv_queue[RECV_MSG_QUEUE];
 static char _recv_stack[THREAD_STACKSIZE_DEFAULT];
-char stack[THREAD_STACKSIZE_MAIN];
+char stack[THREAD_STACKSIZE_MAIN]; //threading stuff
 /* 
 define the required keys for OTAA, e.g over-the-air activation (the
 null arrays need to be updated with valid LoRa values) 
@@ -40,6 +55,117 @@ float TMP_AGG = 0;
 float PRS_AGG = 0;
 int8_t w_i = 0;
 bool REALTIME = false;
+
+static void *emcute_thread(void *arg)
+{
+    (void)arg;
+    emcute_run(EMCUTE_PORT, EMCUTE_ID);
+    return NULL;    /* should never be reached */
+}
+
+/*Tryies to connect to the broker with @address and @port*/
+int connect_mqtt(char address[], char port[])
+{
+    (void) port;
+    sock_udp_ep_t gw = { .family = AF_INET6, .port = EMCUTE_PORT };
+    char *topic = NULL;
+    char *message = "";
+    size_t len = 0;
+
+    /* parse address */
+
+    if (ipv6_addr_from_str((ipv6_addr_t *)&gw.addr.ipv6, address) == NULL) {
+        printf("error parsing IPv6 address\n");
+        return 1;
+    }
+    gw.port = atoi(port);
+    printf("Port set to %i\n",gw.port);
+
+    if (emcute_con(&gw, true, topic, message, len, 0) != EMCUTE_OK) {
+        printf("error: unable to connect to [%s]:%i\n", address, (int)gw.port);
+        return 1;
+    }
+    printf("Successfully connected to gateway at [%s]:%i\n", address, (int)gw.port);
+
+    return 0;
+}
+
+/*Publish a @message into @topic with @QoS.*/
+static int pub_msg(char topic[], char message[], char QoS[])
+{
+    emcute_topic_t t;
+    unsigned flags = EMCUTE_QOS_0;
+
+    /* parse QoS level */
+    flags |= get_qos(QoS);
+    //printf("pub with topic:\t%s\nmsg:\t%s\nflags:\t0x%02x\n", topic, message, (int)flags);
+
+    /* step 1: get topic id */
+    t.name = topic;
+    if (emcute_reg(&t) != EMCUTE_OK) {
+        puts("error: unable to obtain topic ID");
+        return 1;
+    }
+   
+
+    /* step 2: publish data */
+    if (emcute_pub(&t, message, strlen(message), flags) != EMCUTE_OK) {
+        printf("error: unable to publish data to topic '%s [id: %i]'\n", t.name, (int)t.id);
+        return 1;
+    }
+
+    printf("Published %i bytes to topic '%s [id: %i]'\n",
+           (int)strlen(message), t.name, t.id);
+
+    return 0;
+}
+static void on_mqtt_msg(const emcute_topic_t *topic, void *data, size_t len)
+{
+    char *in = (char *)data;
+
+    printf("### got publication for topic '%s' [%i] ###\n",
+           topic->name, (int)topic->id);
+    for (size_t i = 0; i < len; i++) {
+        printf("%c", in[i]);
+    }
+    if(strcmp(in,"rt")==0){
+        REALTIME =true;
+        puts("REALTIME true");
+
+    }else{
+        REALTIME =false;
+        puts("REALTIME flase");
+    }
+    puts("");
+}
+
+int mqtt_sub(char[] topic, char[] QoS)
+{
+    
+    /* find empty subscription slot */
+    unsigned i = 0;
+    for (; (i < NUMOFSUBS) && (subscriptions[i].topic.id != 0); i++) {}
+    if (i == NUMOFSUBS) {
+        puts("error: no memory to store new subscriptions");
+        return 1;
+    }
+
+    unsigned flags = EMCUTE_QOS_0;
+    /* parse QoS level */
+    flags |= get_qos(QoS);
+
+    subscriptions[i].cb = on_mqtt_msg;
+    strcpy(topics[i], topic);
+    subscriptions[i].topic.name = topics[i];
+    if (emcute_sub(&subscriptions[i], flags) != EMCUTE_OK) {
+        printf("error: unable to subscribe to %s\n", topic);
+        return 1;
+    }
+
+    printf("Now subscribed to %s\n", topic);
+    return 0;
+}
+
 
 /*
 Prints in the std out the cause of PUB_FAIL in pub_msg function
@@ -194,7 +320,17 @@ int send_lora(void){
 }
 
 int send_mqtt(void){
-    puts("Soon available");
+    //puts("Soon available");
+    
+    char message[200];
+    compose_message(&message);
+
+    //Print  data (DEBUG) 
+    //TODO: remove it.
+    printf("Sending message:\n%s\n\n",message);
+    printf("strlen(message):\n%d\n\n",strlen(message));
+    pub_msg("room_1", message, "0"); //params: @topic_id, @message, @QoS <- NOTE topic name is the same of id
+    
     return 1;
 }
 
@@ -263,6 +399,11 @@ static int cmd_start_sensors(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
+    if( connect_mqtt("fec0:affe::1","1885") == 1){
+        puts("MQTT Conncetion error, can't switch realtime.");
+    }else{
+        mqtt_sub("room_1_rt","0");
+    }
     // 1. init connections
     if(connect()==CONNECTION_OK){
          // 2. start threads   
@@ -270,7 +411,7 @@ static int cmd_start_sensors(int argc, char **argv)
         thread_create(stack, sizeof(stack), THREAD_PRIORITY_MAIN + 1, THREAD_CREATE_STACKTEST, compose_window, NULL, "thread");//send messages thread
         return 0;
     }else{
-        puts("connection error.\n EXIT 1");
+        puts("LoRa connection error.\n EXIT 1");
     }
     return 1;
     
@@ -286,6 +427,16 @@ int main(void)
 {
     puts("Welcome to RIOT!\n");
     puts("Type `help` for help, Type `start_sensor` to star measuring.\n");
+
+     /* the main thread needs a msg queue to be able to run `ping6`*/
+    msg_init_queue(queue, (sizeof(queue) / sizeof(msg_t)));
+
+    /* initialize our subscription buffers */
+    memset(subscriptions, 0, (NUMOFSUBS * sizeof(emcute_sub_t)));
+
+    /* start the emcute thread */
+    thread_create(stack, sizeof(stack), EMCUTE_PRIO, 0,
+                  emcute_thread, NULL, "emcute");
 
     char line_buf[SHELL_DEFAULT_BUFSIZE];
     shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
