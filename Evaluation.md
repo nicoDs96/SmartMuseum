@@ -8,7 +8,7 @@ This document is the second version of the Evaluation document for the SmartMuse
 </p>   
 Observing the competitors, the differences, the weak points and the strong points of our idea emerged. Many competitors have decided to add a module for the detection of light, we have deemed this feature useless as we will have a web platform to monitor climatic conditions asynchronously and with human in the loop. Some ideas use Excell sheets and personal computers for data processing while we will rely on a special backend and obviously the cloud. Another difference is the ability to monitor air quality  a feature that could be added in the future. The idea that comes closest to ours includes the use of actuators for room cooling but unlike us, it always transmits data in real time, obviously using a much higher amount of data than ours. Another of our strengths is the use of technologies for the monitoring of loaned works of art, none of the previous ideas allows the curators of the pieces of art to remotely monitor the quality of the environment in which the piece is located.
 
-## User Experience Evaluation
+# User Experience Evaluation
 To evaluate the user experience we have designed a prototype of the web dashboard (using Adobe XD Mockup software) and we have tested the usability of the product with some sample users.  
 The prototype:  
 ![](img_new/dash_prototype.PNG)  
@@ -19,11 +19,12 @@ Feedback:
 Since the period is a bit tough and there are severe limitations to social life, we restricted testing to our familiars and some friend. They found the prototype intuitive and easy to use.  
 As a general metodology to evaluate the system we have decided to use [think-aloud interviews](https://www.refsmmat.com/notebooks/think-alouds.html). They are widely used in usability testing, education, and related fields to see how people approach tasks and then to discover errors in the UX and improve it. The evaluation process consist of give the product (the dashboard in this case) to a user and make him interact with the product saying aloud what he is trying to do and how and, eventually, why he is not able to do it.
 
-## Technical Evaluation
+# Technical Evaluation
 We have decided to realize a backend microservice architecture to allow modularity and to make system evolution simple so that the application will be as long-lasting as possible, tolerant to changes, integrable with other projects from the course easily.  
 Due to Covid-19, we will test the product from a technical point of view using IoT-Lab Testbed for the indoor environmental condition monitoring since it provieds full support to LoRaWAN and also gave access to boards with environmental sensors. 
   
 According to the architecture we have described in the [Architecture file](Architecture.md) we are going to compare costs of a solution cloud based and a solution on premise as well as required hardware costs. We assume project is open source hence no employee to pay.
+## Costs
 ### Cloud Hosting Costs 
 *using AWS Pricing Calculator*:
 - To host the Node.js API we use an AWS EC2 on demand instance without daily spike traffic and without scaling, since it will be accessed only by the curator. We assumed, 1 vCPUs, 4 GB of memory and 16 GB EBS storage. The cost per month is 36.17$ choosing one EU region.
@@ -51,11 +52,11 @@ If  the traffic in the museum is limited, me might think to deploy the museum ga
 ### PoC
 For this prof of concept we will deploy a MongoDB instance with Atlas M0 tier (free tier for lifetime) with physical limitation of shared RAM and CPU and storage limit of 512MB. The app will be hosted locally.
  
-### Required Hardware
+## Required Hardware
 We will use some STM NUCLEO family board. They allows to measure at the same time temperature, relative air humidity, air pressure(only some boards). To Support loRaWAN we can use an [extension board](https://www.st.com/en/evaluation-tools/i-nucleo-lrwan1.html).  
 We estimate one board per room (but we should be able to use one of it for two room either and optimize costs).
 
-### Final Notes on Storage Volume Estimation
+## Final Notes on Storage Volume Estimation
 Here a quick explanation on how we have evaluated storage requirements. 
 First of all we introduce a sketch of the data model (might vary during time if some special need emerges). Among the NoSQL family we have decided to choose MongoDB because it is open-source, simple, distributed and easy to scale, can migrate easy from on premise to cloud thanks to Atlas. Hence we assume our data will be stored in BSON and we estimate sizes according to its [specification](http://bsonspec.org/spec.html).   
 
@@ -80,3 +81,4 @@ __Data Volume Estimation__
 From [BSON specification](http://bsonspec.org/spec.html) we can read that int32 is 4 Byte, datetime is 8 Byte, double is 8 Byte too. Hence the size of a message should be ```4 Byte+6*8Byte+8Byte = 60Byte ``` plus the size of field names. Approximate to ```200Bytes```. Since each room send 24 message per day we say that a room send 5 KB of messages each day. Assume 20 rooms, 100 KB message a day, 3 MB a month. Basically nothing.  
 On this very basic estimation we should add a higher data volume each time we switch to real time monitoring. In this case we assume one message per second, hence 86.400 message a day, so 17 MB of message a day. Considering this a very extraordinary event, the data volume is almost null.
 
+## Adaptive Transmission Rates
