@@ -2,22 +2,20 @@
 APPLICATION = museum_boards
 
 # If no BOARD is found in the environment, use this default:
-BOARD ?= esp32-heltec-lora32-v2  #b-l072z-lrwan1
+BOARD=esp32-heltec-lora32-v2
+FEATURES_REQUIRED += periph_gpio periph_i2c
 # if no other driver is specified
-DRIVER ?= lps331ap
+#DRIVER ?= lps331ap
 # This has to be the absolute path to the RIOT base directory:
-RIOTBASE ?= /home/nicods/Scrivania/SmartMuseum/Boards/RIOT   #$(CURDIR)/../../
+RIOTBASE ?= $(CURDIR)/../.. 
 
 #OLED SCREEN MODULE
 #USEPKG += u8g2
 
 #WIFI Module
-#USEMODULE += esp_wifi
-#CFLAGS += -DESP_WIFI_SSID=\"D-Link-5544FC\"
-#CFLAGS += -DESP_WIFI_PASS=\"xGSVxnnyYh\"
-#CFLAGS += -DESP_WIFI_SSID=\"dsnetwork-TIM-31161311\"
-#CFLAGS += -DESP_WIFI_PASS=\"DiSaNtONM\"
-
+USEMODULE += esp_wifi
+CFLAGS += -DESP_WIFI_SSID=\"D-Link-5544FC\"
+CFLAGS += -DESP_WIFI_PASS=\"xGSVxnnyYh\"
 
 # Include packages that pull up and auto-init the link layer.
 # NOTE: 6LoWPAN will be included if IEEE802.15.4 devices are present
@@ -72,4 +70,4 @@ CFLAGS += -DLORAMAC_ACTIVE_REGION=LORAMAC_REGION_$(LORA_REGION)
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1
 
-include $(RIOTBASE)/Makefile.include
+include ../../Makefile.include

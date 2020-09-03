@@ -22,5 +22,5 @@ The PoC currently supports environmental monitoring and emulate actuators to adj
 1.
 2.
 
-we have missed to evaluate (and we did not plan to do it for the moment) the overall UX of the museum dashboard and we did not evaluate the capacity of our backend. This is because we think that the amount of traffic will be very low and also because the overall dashboard is far from being presentable to a final user.
+we have missed to evaluate (and we did not plan to do it for the moment) the overall UX of the museum dashboard and we did not evaluate the capacity of our backend. This is because we think that the amount of traffic will be very low and also because the overall dashboard is far from being complete and presentable to a final user.
 

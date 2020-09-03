@@ -8,7 +8,6 @@
 #include "xtimer.h"
 #include "read_sensors.h"
 #include "msg.h"
-#include "lora_util.h"
 #include "net/loramac.h"
 #include "semtech_loramac.h"
 #include "net/emcute.h" // https://doc.riot-os.org/emcute_8h.html#
@@ -25,11 +24,15 @@
 static msg_t queue[8];
 
 static emcute_sub_t subscriptions[NUMOFSUBS];
+static char topics[NUMOFSUBS][TOPIC_MAXLEN];
 
 //Lora defs
+#define RECV_MSG_QUEUE                   (4U)
+
 static msg_t _recv_queue[RECV_MSG_QUEUE];
 static char _recv_stack[THREAD_STACKSIZE_DEFAULT];
 char stack[THREAD_STACKSIZE_MAIN]; //threading stuff
+
 /* 
 define the required keys for OTAA, e.g over-the-air activation (the
 null arrays need to be updated with valid LoRa values) 
@@ -90,14 +93,12 @@ int connect_mqtt(char address[], char port[])
     return 0;
 }
 
-/*Publish a @message into @topic with @QoS.*/
-static int pub_msg(char topic[], char message[], char QoS[])
+/*Publish a @message into @topic with QoS=1.*/
+static int pub_msg(char topic[], char message[])
 {
     emcute_topic_t t;
-    unsigned flags = EMCUTE_QOS_0;
+    unsigned flags = EMCUTE_QOS_1;
 
-    /* parse QoS level */
-    flags |= get_qos(QoS);
     //printf("pub with topic:\t%s\nmsg:\t%s\nflags:\t0x%02x\n", topic, message, (int)flags);
 
     /* step 1: get topic id */
@@ -138,9 +139,7 @@ static void on_mqtt_msg(const emcute_topic_t *topic, void *data, size_t len)
     }
     puts("");
 }
-
-int mqtt_sub(char[] topic, char[] QoS)
-{
+int mqtt_sub (char *topic){
     
     /* find empty subscription slot */
     unsigned i = 0;
@@ -150,9 +149,8 @@ int mqtt_sub(char[] topic, char[] QoS)
         return 1;
     }
 
-    unsigned flags = EMCUTE_QOS_0;
-    /* parse QoS level */
-    flags |= get_qos(QoS);
+    unsigned flags = EMCUTE_QOS_1;
+    
 
     subscriptions[i].cb = on_mqtt_msg;
     strcpy(topics[i], topic);
@@ -262,18 +260,18 @@ int connect(void)
     semtech_loramac_set_appeui(&loramac, appeui);
     semtech_loramac_set_appkey(&loramac, appkey);
     /* 2.1 setting device tx power */
-    semtech_loramac_set_tx_power(&loramac, DEVICE_POWER);
+    semtech_loramac_set_tx_power(&loramac, 1);
     /* 3. join the network */
     if (semtech_loramac_join(&loramac, LORAMAC_JOIN_OTAA) != SEMTECH_LORAMAC_JOIN_SUCCEEDED)
     {
-        return CONNECTION_FAILED;
+        return 1; //CONNECTION_FAILED;
     }
     puts("\nJoin procedure succeeded, otaa net joined.\n");
 
-    return CONNECTION_OK;
+    return 0; //CONNECTION_OK;
 }
 
-void compose_message(char *message){
+void compose_message(char * message){
     //Get the current time
     char date_time[30];
     time_t t = time(NULL);
@@ -291,7 +289,7 @@ void compose_message(char *message){
     int temp_max_dec = T_MAX - temp_max_abs * 100;
 
 
-    sprintf(*message, "{\"room_id\":\"%s\",\"timestamp\":\"%s\",\"tmp_avg\":%2i.%02i,\"tmp_max\":%2i.%02i,\"tmp_min\":%2i.%02i,\"prs_avg\":%f,\"prs_min\":%d,\"prs_max\":%d}",
+    sprintf(message, "{\"room_id\":\"%s\",\"timestamp\":\"%s\",\"tmp_avg\":%2i.%02i,\"tmp_max\":%2i.%02i,\"tmp_min\":%2i.%02i,\"prs_avg\":%f,\"prs_min\":%d,\"prs_max\":%d}",
                 "1",date_time, temp_agg_abs, temp_agg_dec, temp_min_abs, temp_min_dec, temp_max_abs,temp_max_dec, PRS_AGG, P_MIN, P_MAX);
  
 }
@@ -302,7 +300,7 @@ PRE: execute connect() funciton to initialize lora
 int send_lora(void){
     
     char message[200];
-    compose_message(&message);
+    compose_message(message);
 
     //Print  data (DEBUG) 
     //TODO: remove it.
@@ -313,7 +311,7 @@ int send_lora(void){
     if(return_code != SEMTECH_LORAMAC_TX_DONE){
         puts("PUB FAILURE:\n");
         print_lora_pub_error(return_code); // for debug purposes
-        return PUB_FAIL;
+        return 1; //PUB_FAIL
     }
     return (int)return_code;
 
@@ -323,13 +321,13 @@ int send_mqtt(void){
     //puts("Soon available");
     
     char message[200];
-    compose_message(&message);
+    compose_message(message);
 
     //Print  data (DEBUG) 
     //TODO: remove it.
     printf("Sending message:\n%s\n\n",message);
     printf("strlen(message):\n%d\n\n",strlen(message));
-    pub_msg("room_1", message, "0"); //params: @topic_id, @message, @QoS <- NOTE topic name is the same of id
+    pub_msg("room_1", message); //params: @topic_id, @message,  NOTE topic name is the same of id
     
     return 1;
 }
@@ -402,10 +400,10 @@ static int cmd_start_sensors(int argc, char **argv)
     if( connect_mqtt("fec0:affe::1","1885") == 1){
         puts("MQTT Conncetion error, can't switch realtime.");
     }else{
-        mqtt_sub("room_1_rt","0");
+        mqtt_sub("room_1_rt");
     }
     // 1. init connections
-    if(connect()==CONNECTION_OK){
+    if(connect()== 0 ){ //CONNECTION_OK
          // 2. start threads   
         thread_create(_recv_stack, sizeof(_recv_stack), THREAD_PRIORITY_MAIN - 1, 0, _recv, NULL, "recv thread"); //receive thread
         thread_create(stack, sizeof(stack), THREAD_PRIORITY_MAIN + 1, THREAD_CREATE_STACKTEST, compose_window, NULL, "thread");//send messages thread

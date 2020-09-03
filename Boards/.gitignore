@@ -1,1 +1,3 @@
 bin/
+sensor_boards_fake/
+RIOT/

@@ -39,3 +39,14 @@ int read_sensors(uint16_t *pres, int16_t *temp)
            
     return READ_OK;
 }
+
+
+int read_sensors(uint16_t *hum, int16_t *temp)
+{
+    uint32_t  	seed = 1;
+    random_init(seed);
+    *temp = (int16_t) random_uint32_range(11, 46);
+    *hum = (uint16_t) random_uint32_range(0, 2101 );
+    return READ_OK;
+
+}
