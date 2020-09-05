@@ -6,11 +6,12 @@ The main comment we received on the second version of the project was that: it w
 
 
 ## Design, Architecture, Evaluation Changes
-No big changes were done to our 2nd version of [Design](Design.md),[Architecture](Architecture.md) and [Evaluation](Evaluation.md) documents. The major difference is in the [Evaluation](Evaluation.md) document, where two chapters are added at the end to explain the missing features ad described above.
+No big changes were done to our 2nd version of [Design](Design.md),[Architecture](Architecture.md) and [Evaluation](Evaluation.md) documents. The major difference is in the [Evaluation](Evaluation.md) document, where two chapters are added at the end to explain the missing features as described above and a new testing board is added. Indeed, to try to implement a real case scenario we have purchased a [board](https://heltec.org/project/wifi-lora-32/) supporting both lora and wifi (and bluetooth) without any extension, and we tested the code on it. The only drawback is that here we do not have access to real environmental sensor but we emulated them.
 
 ## Currently Implemented Functionalities
 The PoC currently supports environmental monitoring and emulate actuators to adjust indoor microclimate. In detail we provide:
-1. temperature, humidity, and air pressure measurements feature; 
+1. temperature and humidity measurements simulation feature; 
+7. actuators (simulated with a simple led).
 2. the possibility to send measures to the cloud with LoRaWAN using TheThingsNetwork infrastructure;
 3. the possibility to switch to MQTT on-demand and have real-time monitoring and then switch back to LoRaWAN less frequent messages;
 4. persistent storage;

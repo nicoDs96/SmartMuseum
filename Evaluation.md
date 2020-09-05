@@ -53,8 +53,9 @@ If  the traffic in the museum is limited, me might think to deploy the museum ga
 For this prof of concept we will deploy a MongoDB instance with Atlas M0 tier (free tier for lifetime) with physical limitation of shared RAM and CPU and storage limit of 512MB. The app will be hosted locally.
  
 ## Required Hardware
-We will use some STM NUCLEO family board. They allows to measure at the same time temperature, relative air humidity, air pressure(only some boards). To Support loRaWAN we can use an [extension board](https://www.st.com/en/evaluation-tools/i-nucleo-lrwan1.html).  
-We estimate one board per room (but we should be able to use one of it for two room either and optimize costs).
+We will use some HELTEC family [board](https://heltec.org/project/wifi-lora-32/). They allows to use bluetooth, wifi and lora without addiotional extensions at the price of 10$.  
+We estimate one board per room (but we should be able to use one of it for two room either and optimize costs).  
+The board has a microprocessor ESP32 (dual-core 32-bit MCU + ULP core), with LoRa node chip SX1276/SX1278; Micro USB interface; Onboard SH1.25-2 battery interface, integrated lithium battery management system; Integrated WiFi, LoRa, Bluetooth; Onboard 0.96-inch 128*64 dot matrix OLED display; Integrated CP2102 USB to serial port chip, convenient for program downloading, debugging information printing;
 
 ## Final Notes on Storage Volume Estimation
 Here a quick explanation on how we have evaluated storage requirements. 
