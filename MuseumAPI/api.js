@@ -16,7 +16,7 @@ var device = awsIot.device({
     keyPath: '/home/nicods/Scrivania/SmartMuseum/MuseumAPI/AWSCerts/station.private.key',
     certPath: '/home/nicods/Scrivania/SmartMuseum/MuseumAPI/AWSCerts/station.cert.pem',
     caPath: '/home/nicods/Scrivania/SmartMuseum/MuseumAPI/AWSCerts/root-CA.crt',
-    clientId: 'client',
+    clientId: 'client2',
     host: 'a1czszdg9cjrm-ats.iot.us-east-1.amazonaws.com'
 });
   
@@ -52,8 +52,8 @@ app.get('/stats/', function (req, res) {
 });
 
 app.get('/stats/:roomId', function (req, res) {
-    if(  Number(req.params.clientId) > 0 ){
-        let room_nr = Number(req.params.clientId);
+    if(  Number(req.params.roomId) > 0 ){
+        let room_nr = Number(req.params.roomId);
         /*TODO
         query the db and send the stats of the given room (historical and eventually live if available)
         */
@@ -70,8 +70,8 @@ app.get('/stats/:roomId', function (req, res) {
 app.post('/thresholds/:roomId', function (req, res) {
     try {
 
-        if(  Number(req.params.clientId) > 0 ){
-            let room_nr = Number(req.params.clientId);
+        if(  Number(req.params.roomId) > 0 ){
+            let room_nr = Number(req.params.roomId);
             
             /*TODO
             - get body response
@@ -228,3 +228,40 @@ var getStats = async (room,start_date,end_date)=>{
         console.error(e);
     }
 }
+
+/* AWS PART*/
+
+device
+  .on('connect', function() {
+    console.log('connect');
+    device.subscribe('topic_1'); //subscribe to sensors reading topic 
+  });
+
+var window_size = 30;
+var read_sensor_period = 10; //ms
+var no_delay_counter = 0;
+
+device
+  .on('message', function(topic, payload) {
+    console.log('message', topic, payload.toString());
+    payload = JSON.parse(payload.toString());
+    payload['datetime']=new Date(payload.datetime);
+    let net_latency = new Date(Date.now())- new Date(payload.datetime); //ms
+    
+    if( net_latency > window_size*read_sensor_period){ //make window size bigger
+      window_size =  Math.trunc(net_latency/read_sensor_period);
+      no_delay_counter=0;
+      device.publish('topic_2', JSON.stringify({new_window_size:window_size}));
+    }
+    else{
+      no_delay_counter++;
+      if(no_delay_counter%30==0){ //shrink window size after 30 messages without delay
+        window_size = Math.trunc(window_size - window_size*0.15);
+        device.publish('topic_2', JSON.stringify({new_window_size:window_size}));
+      }
+    }
+    //write the measures to the db
+    msg2db(payload);
+    
+  });
+
