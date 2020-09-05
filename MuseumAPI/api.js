@@ -195,7 +195,7 @@ var msg2db = async (room)=>{
 
     // Use connect method to connect to the Server
     await client.connect() 
-    console.log("Connected successfully to server");
+    //console.log("Connected successfully to server");
     const db = client.db("SmartMuseum");
     const col =db.collection("Rooms"); 
     await col.insertOne(room);
@@ -231,16 +231,18 @@ var getStats = async (room,start_date,end_date)=>{
 
 /* AWS PART*/
 
+//subscribe to sensors readings topic
 device
   .on('connect', function() {
     console.log('connect');
-    device.subscribe('topic_1'); //subscribe to sensors reading topic 
+    device.subscribe('topic_1');  
   });
 
 var window_size = 30;
 var read_sensor_period = 10; //ms
 var no_delay_counter = 0;
 
+//each time a message is received adjust the window if necessary and send the new value to the things
 device
   .on('message', function(topic, payload) {
     console.log('message', topic, payload.toString());

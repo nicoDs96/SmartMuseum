@@ -7,7 +7,7 @@ FEATURES_REQUIRED += periph_gpio periph_i2c
 # if no other driver is specified
 #DRIVER ?= lps331ap
 # This has to be the absolute path to the RIOT base directory:
-RIOTBASE ?= $(CURDIR)/../.. 
+RIOTBASE = /home/nicods/Scrivania/SmartMuseum/Boards/RIOT
 
 #OLED SCREEN MODULE
 #USEPKG += u8g2
@@ -70,4 +70,4 @@ CFLAGS += -DLORAMAC_ACTIVE_REGION=LORAMAC_REGION_$(LORA_REGION)
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1
 
-include ../../Makefile.include
+include $(RIOTBASE)/Makefile.include

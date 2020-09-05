@@ -126,18 +126,30 @@ static void on_mqtt_msg(const emcute_topic_t *topic, void *data, size_t len)
 
     printf("### got publication for topic '%s' [%i] ###\n",
            topic->name, (int)topic->id);
-    for (size_t i = 0; i < len; i++) {
+    
+    if(strcmp(topic->name,"topic_3")==0){
+        for (size_t i = 0; i < len; i++) {
         printf("%c", in[i]);
-    }
-    if(strcmp(in,"rt")==0){
-        REALTIME =true;
-        puts("REALTIME true");
+        }
+        if(strcmp(in,"{\"realtime\":true}")==0){
+            REALTIME =true;
+            puts("REALTIME true");
 
-    }else{
-        REALTIME =false;
-        puts("REALTIME flase");
+        }else{
+            REALTIME =false;
+            puts("REALTIME flase");
+        }
+        puts("");
     }
-    puts("");
+    if(strcmp(topic->name,"topic_2")==0){
+    
+        long new_win;
+        char *remaining;
+        new_win = strtol(data, &remaining, 10); //extract the new windows size from payload
+        WINDOW_SIZE = (int8_t)new_win;
+    }
+
+    
 }
 int mqtt_sub (char *topic){
     
@@ -327,7 +339,7 @@ int send_mqtt(void){
     //TODO: remove it.
     printf("Sending message:\n%s\n\n",message);
     printf("strlen(message):\n%d\n\n",strlen(message));
-    pub_msg("room_1", message); //params: @topic_id, @message,  NOTE topic name is the same of id
+    pub_msg("topic_1", message); //params: @topic_id, @message,  NOTE topic name is the same of id
     
     return 1;
 }
@@ -386,6 +398,7 @@ void *compose_window(void *arg)
             }
         }
         xtimer_usleep(100000);//1 microsecond (us) = 10^(-6) seconds -> 100 ms = 100000 us
+        
     }
     
     return NULL;
@@ -400,7 +413,7 @@ static int cmd_start_sensors(int argc, char **argv)
     if( connect_mqtt("fec0:affe::1","1885") == 1){
         puts("MQTT Conncetion error, can't switch realtime.");
     }else{
-        mqtt_sub("room_1_rt");
+        mqtt_sub("topic_2");
     }
     // 1. init connections
     if(connect()== 0 ){ //CONNECTION_OK
