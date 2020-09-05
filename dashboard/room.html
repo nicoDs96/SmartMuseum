@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-light" style="background-color: #ff0000;">
+     <button id="mainRoom" type="button" style="background-color: cornflowerblue;" class="btn btn-primary btn-sm">Smart Museum</button>
+  </nav>
+
+  <div class="card text-center">
+    <div class="card-header">
+      <h5 class="card-title" id="idRoom"></h5>
+    </div>
+    <div class="card-body">
+      <h8 class="card-title">Monitoring:</h8>
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <th>Temp max</th>
+            <td id="Tem_max"></td>
+
+          </tr>
+          <tr>
+            <th>Temp min</th>
+            <td id="Tem_min"></td>
+          </tr>
+          <tr>
+            <th>Temp avg</th>
+            <td id="Tem_avg"></td>
+          </tr>
+          <tr>
+            <th>Hum max</th>
+            <td id="Hum_max"></td>
+          </tr>
+          <tr>
+            <th>Hum min</th>
+            <td id="Hum_min"></td>
+          </tr>
+          <tr>
+            <th>Hum avg</th>
+            <td id="Hum_avg"></td>
+          </tr>
+        </tbody>
+      </table>
+      
+    </div>
+    <div class="card-footer text-muted">
+       
+    </div>
+  </div>
+
+
+
+<!-- 
+  <div class="card">
+    <div class="card-header">
+      <h3 id="idRoom"></h3>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">History</h5>
+      <canvas id="chart" width="400" height="300"></canvas>
+      <script>
+        var ctx = document.getElementById('chart').getContext('2d');
+        var myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+              label: '# of Votes',
+              data: [12, 19, 3, 5, 2, 3],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
+        });
+
+      </script>
+    </div>
+  </div>
+-->
+<!--
+  <div class="card">
+    <div class="card-header">
+      Alert Treshholds
+    </div>
+    <div class="card-body">
+      Temperature: <br>
+      <p>
+        <div class="container" style="display: flex;justify-content: space-between;">
+          Min:
+          <div id="minT"></div>
+          <button type="button" class="btn btn-warning" onclick="add('#minT')">+</button>
+          <button type="button" class="btn btn-warning" onclick="substract('#minT')">-</button>
+      </p>
+      <p>
+        Max:
+        <div id="maxT"></div>
+        <button type="button" class="btn btn-warning" onclick="addMT('#maxT')">+</button>
+        <button type="button" class="btn btn-warning" onclick="substract('#maxT')">-</button>
+      </p>
+
+    </div>
+    <div class="card-body">
+      Humidity: <br>
+      <p>
+        <div class="container" style="display: flex;justify-content: space-between;">
+          Min:
+          <div id="minH"></div>
+          <button type="button" class="btn btn-warning" onclick="add('#minH')">+</button>
+          <button type="button" class="btn btn-warning" onclick="substract('#minH')">-</button>
+      </p>
+      <p>
+        Max:
+        <div id="maxH"></div>
+        <button type="button" class="btn btn-warning" onclick="add('#maxH')">+</button>
+        <button type="button" class="btn btn-warning" onclick="substract('#maxH')">-</button>
+      </p>
+
+    </div>
+
+  </div>
+  </div>
+-->
+
+
+
+
+
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+  <script type="text/javascript" src="root.js"> </script>
+</body>
+
+</html>
