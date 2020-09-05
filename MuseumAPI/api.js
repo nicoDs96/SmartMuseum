@@ -26,7 +26,6 @@ var device = awsIot.device({
 //MongoDB dbUser dbUser
 // to connect to ATLAS without error configure the whitelist: https://docs.atlas.mongodb.com/tutorial/whitelist-connection-ip-address/
 const uri = "mongodb+srv://dbUser:dbUser@cluster0-sa1g1.mongodb.net/SmartMuseum?retryWrites=true&w=majority";//"mongodb+srv://dbUser:dbUser@cluster0-sa1g1.mongodb.net/test?retryWrites=true&w=majority";
-var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(express.json()); // for parsing application/json
 
@@ -96,49 +95,13 @@ app.post('/thresholds/:roomId', function (req, res) {
 });
 
 app.get('/testDB/', async  (req, res) => {
-   try{
-        //let urii ="mongodb://localhost:27017";
-        //let urii= "mongodb+srv://dbUser:dbUser@cluster0-sa1g1.mongodb.net/SmartMuseum?retryWrites=true&w=majority"
     
-
-        // Use connect method to connect to the Server
-        await client.connect( async err => {
-            assert.equal(null, err);
-            console.log("Connected successfully to server");
-            const db = client.db("SmartMuseum");
-
-            // perform actions on the collection object
-            myobj = [];
-
-            for(i=0;i<10;i++){
-                
-                let room = { 
-                    Room: 1,
-                    Tem_min: 18.1,
-                    Tem_max: 27.8,
-                    Tem_avg: 24.6,
-                    Hum_min: 18.1,
-                    Hum_max: 27.8,
-                    Hum_avg: 24.6,
-                    realtime:false
-                    };
-                room["datetime"]=new Date().toLocaleString(); 
-               
-                //collection.insertOne(room);
-                await db.collection("Rooms").insertOne(room, (err, r) => {
-                    assert.equal(null, err);
-                    assert.equal(1, r.insertedCount);
-                });
-                    
-            }
-            
-        });
-
-        client.close();
-      
+    try{  
+        let r =await getStats("1","2020-09-04T15:42:58.328454247Z"); //getStats(room, start date, end date)
+        console.log(r);
         res.type('application/json');
         res.status(200);
-        res.send(JSON.stringify(message));
+        res.send(JSON.stringify(r));
     }
     catch{
         res.status(404).send({});
@@ -218,7 +181,7 @@ var msg2json =  (payload) =>{
         console.error(`Error, code:${e[0]}\tvalue:${e[1]}` );
     }
   });
-  new_msg['datetime']=payload.metadata.time;
+  new_msg['datetime']=new Date(payload.metadata.time);
   new_msg['realtime']=false;
   console.log(new_msg);
   return new_msg;
@@ -227,26 +190,41 @@ var msg2json =  (payload) =>{
 //insert one room data into the db
 var msg2db = async (room)=>{
   try{
-    //let urii ="mongodb://localhost:27017";
-    //let urii= "mongodb+srv://dbUser:dbUser@cluster0-sa1g1.mongodb.net/SmartMuseum?retryWrites=true&w=majority"
-
+    
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
     // Use connect method to connect to the Server
-    await client.connect( async err => {
-      assert.equal(null, err);
-      console.log("Connected successfully to server");
-      const db = client.db("SmartMuseum");
-      //collection.insertOne(room);
-      await db.collection("Rooms").insertOne(room, (err, r) => {
-        assert.equal(null, err);
-        assert.equal(1, r.insertedCount);
-      });
-        
-    });
+    await client.connect() 
+    console.log("Connected successfully to server");
+    const db = client.db("SmartMuseum");
+    const col =db.collection("Rooms"); 
+    await col.insertOne(room);
 
-    client.close();
+    await client.close();
   } 
   catch(e){
     console.error(e);
   }
+}
+
+//insert one room data into the db
+var getStats = async (room,start_date,end_date)=>{
+    let result;
+    try{
+        const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+        // Use connect method to connect to the Server
+        await client.connect(); 
+        console.log("Connected successfully to server");
+        const db = client.db("SmartMuseum");
+        const col = db.collection("Rooms");
+        result = await col.find({room:room,datetime:{ $gte:new Date(start_date)}}).toArray();
+        console.log(result);
+        await client.close();
+        console.log(result.length);
+        return result;
+    } 
+    catch(e){
+        console.error(e);
+    }
 }
