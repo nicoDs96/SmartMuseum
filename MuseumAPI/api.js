@@ -74,12 +74,11 @@ app.get('/stats/:roomId', async (req, res)=> {
     
     let r = await dbo.collection("Rooms").find(query).sort({ $natural: -1 }).limit(1).toArray();
     console.log(r);
-    
     client.close();
 
     res.type('application/json');
-    res.status(200);
-    res.send(JSON.stringify(result));
+    res.status(200).send(JSON.stringify(r));
+    
   } catch  {
     res.status(404).send({});
   }
