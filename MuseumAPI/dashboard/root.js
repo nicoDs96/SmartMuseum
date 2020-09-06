@@ -62,30 +62,30 @@ var myIpAddr =
 
                     try {
                         // SET DATA TO HTML 
-                        console.log(response);
-                        console.log(response[0]["Room"]);
-                        console.log(response[1]["Tem_max"].toString());
+                        console.log(response.room1[0]["room"]);
+                       
+                       
 
-                        $('#Tem_max').text(response[2]["Tem_max"]);
-                        $('#Tem_min').text(response[2]["Tem_min"]);
-                        $('#Tem_avg').text(response[2]["Tem_avg"]);
-                        $('#Hum_min').text(response[2]["Hum_min"]);
-                        $('#Hum_max').text(response[2]["Hum_max"]);
-                        $('#Hum_avg').text(response[2]["Hum_avg"]);
+                        $('#Tem_max').text(response.room1[0]["Tem_max"]);
+                        $('#Tem_min').text(response.room1[0]["Tem_min"]);
+                        $('#Tem_avg').text(response.room1[0]["Tem_avg"]);
+                        $('#Hum_min').text(response.room1[0]["Hum_min"]);
+                        $('#Hum_max').text(response.room1[0]["Hum_max"]);
+                        $('#Hum_avg').text(response.room1[0]["Hum_avg"]);
 
-                        $('#Tem_max2').text(response[1]["Tem_max"]);
-                        $('#Tem_min2').text(response[1]["Tem_min"]);
-                        $('#Tem_avg2').text(response[1]["Tem_avg"]);
-                        $('#Hum_min2').text(response[1]["Hum_min"]);
-                        $('#Hum_max2').text(response[1]["Hum_max"]);
-                        $('#Hum_avg2').text(response[1]["Hum_avg"]);
+                        $('#Tem_max2').text(response.room2[0]["Tem_max"]);
+                        $('#Tem_min2').text(response.room2[0]["Tem_min"]);
+                        $('#Tem_avg2').text(response.room2[0]["Tem_avg"]);
+                        $('#Hum_min2').text(response.room2[0]["Hum_min"]);
+                        $('#Hum_max2').text(response.room2[0]["Hum_max"]);
+                        $('#Hum_avg2').text(response.room2[0]["Hum_avg"]);
 
-                        $('#Tem_max3').text(response[0]["Tem_max"]);
-                        $('#Tem_min3').text(response[0]["Tem_min"]);
-                        $('#Tem_avg3').text(response[0]["Tem_avg"]);
-                        $('#Hum_min3').text(response[0]["Hum_min"]);
-                        $('#Hum_max3').text(response[0]["Hum_max"]);
-                        $('#Hum_avg3').text(response[0]["Hum_avg"]);
+                        $('#Tem_max3').text(response.room3[0]["Tem_max"]);
+                        $('#Tem_min3').text(response.room3[0]["Tem_min"]);
+                        $('#Tem_avg3').text(response.room3[0]["Tem_avg"]);
+                        $('#Hum_min3').text(response.room3[0]["Hum_min"]);
+                        $('#Hum_max3').text(response.room3[0]["Hum_max"]);
+                        $('#Hum_avg3').text(response.room3[0]["Hum_avg"]);
 
 
                     } catch (error) {
