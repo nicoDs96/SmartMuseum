@@ -16,7 +16,7 @@ var device = awsIot.device({
     keyPath: '/home/nicods/Scrivania/SmartMuseum/MuseumAPI/AWSCerts/station.private.key',
     certPath: '/home/nicods/Scrivania/SmartMuseum/MuseumAPI/AWSCerts/station.cert.pem',
     caPath: '/home/nicods/Scrivania/SmartMuseum/MuseumAPI/AWSCerts/root-CA.crt',
-    clientId: 'client',
+    clientId: 'client2',
     host: 'a1czszdg9cjrm-ats.iot.us-east-1.amazonaws.com'
 });
 
@@ -26,7 +26,7 @@ var device = awsIot.device({
 //MongoDB dbUser dbUser
 // to connect to ATLAS without error configure the whitelist: https://docs.atlas.mongodb.com/tutorial/whitelist-connection-ip-address/
 const uri = "mongodb+srv://dbUser:dbUser@cluster0-sa1g1.mongodb.net/SmartMuseum?retryWrites=true&w=majority";//"mongodb+srv://dbUser:dbUser@cluster0-sa1g1.mongodb.net/test?retryWrites=true&w=majority";
-var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+app.use(express.static('dashboard'));
 app.use(cors())
 app.use(express.json()); // for parsing application/json
 
@@ -36,69 +36,50 @@ app.get('/test', function (req, res) {
 });
 
 //get last hour stats of all the rooms (MAIN PAGE STATS)
-app.get('/stats/', function (req, res) {
+app.get('/stats/', async (req, res) => {
   try {
     //  var id = parseInt(req.body.Room, 10)
+    var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
+    var dbo = client.db("SmartMuseum");
+    let room1 = await dbo.collection("Rooms").find({ room:"1" }).sort({ $natural: -1 }).limit(1).toArray();
+    let room2 = await dbo.collection("Rooms").find({ room:"2" }).sort({ $natural: -1 }).limit(1).toArray();
+    let room3 = await dbo.collection("Rooms").find({ room:"3" }).sort({ $natural: -1 }).limit(1).toArray();
+    result ={}
+    result['room1']=room1;
+    result['room2']=room2;
+    result['room3']=room3;
+    console.log(result);
+    client.close();
 
-    MongoClient.connect(uri, function (err, db) {
-      if (err) throw err;
-
-
-      var dbo = db.db("SmartMuseum");
-      //  var query = { "Room": 1, "Room": 2 };
-
-
-      //dbo.collection("Rooms").find({"Room": 1} ).toArray(function(err, result) {
-      //dbo.collection("Rooms").find({"Room":{$in:[1,2]}}).sort({ $natural: -1 }).limit(2).toArray(function (err, result) {
-      dbo.collection("Rooms").find({ Room: { $in: [1, 2, 3] } }).sort({ $natural: -1 }).limit(3).toArray(function (err, result) {
-        if (err) throw err;
-        console.log(result);
-        db.close();
-
-        // console.log("debug");
-
-        client.close();
-
-        res.type('application/json');
-        res.status(200);
-        res.send(JSON.stringify(result));
-
-      });
-
-    });
+    res.type('application/json');
+    res.status(200);
+    res.send(JSON.stringify(result));
+  
   } catch  {
     res.status(404).send({});
   }
 
 });
 
-app.get('/stats/:roomId', function (req, res) {
+app.get('/stats/:roomId', async (req, res)=> {
   try {
     
     roomId=Number(req.params.roomId);
+    var query = { "room": roomId.toString() };
+    
+    var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
+    var dbo = client.db("SmartMuseum");
+    
+    let r = await dbo.collection("Rooms").find(query).sort({ $natural: -1 }).limit(1).toArray();
+    console.log(r);
+    
+    client.close();
 
-    MongoClient.connect(uri, function (err, db) {
-      if (err) throw err;
-      var dbo = db.db("SmartMuseum");
-      var query = { "Room": roomId };
-
-      //dbo.collection("Rooms").find({"Room": 1} ).toArray(function(err, result) {
-      dbo.collection("Rooms").find(query).sort({ $natural: -1 }).limit(1).toArray(function (err, result) {
-
-        if (err) throw err;
-        console.log(result);
-        db.close();
-
-        client.close();
-
-        res.type('application/json');
-        res.status(200);
-        res.send(JSON.stringify(result));
-
-      });
-
-
-    });
+    res.type('application/json');
+    res.status(200);
+    res.send(JSON.stringify(result));
   } catch  {
     res.status(404).send({});
   }
@@ -160,7 +141,7 @@ app.listen(3000, function () {
 
 
 /*
-CODE NOT BELONGING TO THE API i.e. ttn/mqtt routines
+CODE NOT BELONGING TO THE REST-API i.e. ttn/mqtt routines
 */
 
 ttn.data(appID, accessKey)
