@@ -38,30 +38,24 @@ app.get('/test', function (req, res) {
 //get last hour stats of all the rooms (MAIN PAGE STATS)
 app.get('/stats/', function (req, res) {
   try {
-    //  var id = parseInt(req.body.Room, 10)
+   //  var id = parseInt(req.body.Room, 10)
+   var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+   await client.connect();
+   var dbo = client.db("SmartMuseum");
+   let room1 = await dbo.collection("Rooms").find({ room:"1" }).sort({ $natural: -1 }).limit(1).toArray();
+   let room2 = await dbo.collection("Rooms").find({ room:"2" }).sort({ $natural: -1 }).limit(1).toArray();
+   let room3 = await dbo.collection("Rooms").find({ room:"3" }).sort({ $natural: -1 }).limit(1).toArray();
+   result ={}
+   result['room1']=room1;
+   result['room2']=room2;
+   result['room3']=room3;
+   console.log(result);
+   client.close();
 
-    MongoClient.connect(uri, function (err, db) {
-      if (err) throw err;
-
-
-      var dbo = db.db("SmartMuseum");
-      //  var query = { "Room": 1, "Room": 2 };
-
-
-      //dbo.collection("Rooms").find({"Room": 1} ).toArray(function(err, result) {
-      //dbo.collection("Rooms").find({"Room":{$in:[1,2]}}).sort({ $natural: -1 }).limit(2).toArray(function (err, result) {
-      dbo.collection("Rooms").find({ Room: { $in: [1, 2, 3] } }).sort({ $natural: -1 }).limit(3).toArray(function (err, result) {
-        if (err) throw err;
-        console.log(result);
-        db.close();
-
-        // console.log("debug");
-
-        client.close();
-
-        res.type('application/json');
-        res.status(200);
-        res.send(JSON.stringify(result));
+   res.type('application/json');
+   res.status(200);
+   res.send(JSON.stringify(result));
+ 
 
       });
 
@@ -74,13 +68,33 @@ app.get('/stats/', function (req, res) {
 
 app.get('/stats/:roomId', function (req, res) {
   try {
-    
-    roomId=Number(req.params.roomId);
+   
+    roomId = (req.params.roomId);
+
+
+
+
+    //const roomId = urlParams.get('roomId')
+
+
+
+    //console.log(roomId);
+
+    console.log("debug");
+
+    //var id = parseInt(req.body.Room, 10)
 
     MongoClient.connect(uri, function (err, db) {
       if (err) throw err;
+
+
+
+
       var dbo = db.db("SmartMuseum");
-      var query = { "Room": roomId };
+      var query = { "room": roomId };
+
+
+
 
       //dbo.collection("Rooms").find({"Room": 1} ).toArray(function(err, result) {
       dbo.collection("Rooms").find(query).sort({ $natural: -1 }).limit(1).toArray(function (err, result) {
@@ -88,6 +102,8 @@ app.get('/stats/:roomId', function (req, res) {
         if (err) throw err;
         console.log(result);
         db.close();
+
+        // console.log("debug");
 
         client.close();
 
