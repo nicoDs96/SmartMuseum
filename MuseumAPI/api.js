@@ -12,13 +12,13 @@ var cors = require('cors')
 var appID = "env_stat";
 var accessKey = "ttn-account-v2.-YKpgPfGoBOeCIURbXDcCA_0nGg_DMwFKveFfiUx2bs";
 //AWS params
-/*var device = awsIot.device({
+var device = awsIot.device({
     keyPath: '/home/nicods/Scrivania/SmartMuseum/MuseumAPI/AWSCerts/station.private.key',
     certPath: '/home/nicods/Scrivania/SmartMuseum/MuseumAPI/AWSCerts/station.cert.pem',
     caPath: '/home/nicods/Scrivania/SmartMuseum/MuseumAPI/AWSCerts/root-CA.crt',
     clientId: 'client',
     host: 'a1czszdg9cjrm-ats.iot.us-east-1.amazonaws.com'
-});*/
+});
 
 // https://github.com/aws/aws-iot-device-sdk-js  see test/aws_iot_test.js for working example
 
@@ -36,27 +36,36 @@ app.get('/test', function (req, res) {
 });
 
 //get last hour stats of all the rooms (MAIN PAGE STATS)
-
-app.get('/stats/', async (req, res) => {
+app.get('/stats/', function (req, res) {
   try {
     //  var id = parseInt(req.body.Room, 10)
-    var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    await client.connect();
-    var dbo = client.db("SmartMuseum");
-    let room1 = await dbo.collection("Rooms").find({ room:"1" }).sort({ $natural: -1 }).limit(1).toArray();
-    let room2 = await dbo.collection("Rooms").find({ room:"2" }).sort({ $natural: -1 }).limit(1).toArray();
-    let room3 = await dbo.collection("Rooms").find({ room:"3" }).sort({ $natural: -1 }).limit(1).toArray();
-    result ={}
-    result['room1']=room1;
-    result['room2']=room2;
-    result['room3']=room3;
-    console.log(result);
-    client.close();
 
-    res.type('application/json');
-    res.status(200);
-    res.send(JSON.stringify(result));
-  
+    MongoClient.connect(uri, function (err, db) {
+      if (err) throw err;
+
+
+      var dbo = db.db("SmartMuseum");
+      //  var query = { "Room": 1, "Room": 2 };
+
+
+      //dbo.collection("Rooms").find({"Room": 1} ).toArray(function(err, result) {
+      //dbo.collection("Rooms").find({"Room":{$in:[1,2]}}).sort({ $natural: -1 }).limit(2).toArray(function (err, result) {
+      dbo.collection("Rooms").find({ Room: { $in: [1, 2, 3] } }).sort({ $natural: -1 }).limit(3).toArray(function (err, result) {
+        if (err) throw err;
+        console.log(result);
+        db.close();
+
+        // console.log("debug");
+
+        client.close();
+
+        res.type('application/json');
+        res.status(200);
+        res.send(JSON.stringify(result));
+
+      });
+
+    });
   } catch  {
     res.status(404).send({});
   }
@@ -65,33 +74,13 @@ app.get('/stats/', async (req, res) => {
 
 app.get('/stats/:roomId', function (req, res) {
   try {
-
-    roomId = (req.params.roomId);
-
-
-
-
-    //const roomId = urlParams.get('roomId')
-
-
-
-    //console.log(roomId);
-
-    console.log("debug");
-
-    //var id = parseInt(req.body.Room, 10)
+    
+    roomId=Number(req.params.roomId);
 
     MongoClient.connect(uri, function (err, db) {
       if (err) throw err;
-
-
-
-
       var dbo = db.db("SmartMuseum");
-      var query = { "room": roomId };
-
-
-
+      var query = { "Room": roomId };
 
       //dbo.collection("Rooms").find({"Room": 1} ).toArray(function(err, result) {
       dbo.collection("Rooms").find(query).sort({ $natural: -1 }).limit(1).toArray(function (err, result) {
@@ -99,8 +88,6 @@ app.get('/stats/:roomId', function (req, res) {
         if (err) throw err;
         console.log(result);
         db.close();
-
-        // console.log("debug");
 
         client.close();
 
@@ -279,38 +266,40 @@ var getStats = async (room, start_date, end_date) => {
   }
 }
 
+/* AWS PART*/
 
+//subscribe to sensors readings topic
+device
+  .on('connect', function() {
+    console.log('connect');
+    device.subscribe('topic_1');  
+  });
 
-    // //  var id = parseInt(req.body.Room, 10)
+var window_size = 30;
+var read_sensor_period = 10; //ms
+var no_delay_counter = 0;
 
-    // MongoClient.connect(uri, function (err, db) {
-    //   if (err) throw err;
+//each time a message is received adjust the window if necessary and send the new value to the things
+device
+  .on('message', function(topic, payload) {
+    console.log('message', topic, payload.toString());
+    payload = JSON.parse(payload.toString());
+    payload['datetime']=new Date(payload.datetime);
+    let net_latency = new Date(Date.now())- new Date(payload.datetime); //ms
 
+    if( net_latency > window_size*read_sensor_period){ //make window size bigger
+      window_size =  Math.trunc(net_latency/read_sensor_period);
+      no_delay_counter=0;
+      device.publish('topic_2', JSON.stringify({new_window_size:window_size}));
+    }
+    else{
+      no_delay_counter++;
+      if(no_delay_counter%30==0){ //shrink window size after 30 messages without delay
+        window_size = Math.trunc(window_size - window_size*0.15);
+        device.publish('topic_2', JSON.stringify({new_window_size:window_size}));
+      }
+    }
+    //write the measures to the db
+    msg2db(payload);
 
-    //   var dbo = db.db("SmartMuseum");
-    //   //  var query = { "Room": 1, "Room": 2 };
-
-
-    //   //dbo.collection("Rooms").find({"Room": 1} ).toArray(function(err, result) {
-    //   //dbo.collection("Rooms").find({"Room":{$in:[1,2]}}).sort({ $natural: -1 }).limit(2).toArray(function (err, result) {
-    //   dbo.collection("Rooms").find({ room: { $in: ['1', '2', '3'] } }).sort({ $natural: -1 }).limit(3).toArray(function (err, result) {
-    //     if (err) throw err;
-    //     console.log(result);
-    //     db.close();
-
-    //     // console.log("debug");
-
-    //     client.close();
-
-    //     res.type('application/json');
-    //     res.status(200);
-    //     res.send(JSON.stringify(result));
-
-    //   });
-
-
-
-
-
-
-
+  });
