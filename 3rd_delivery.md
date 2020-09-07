@@ -11,7 +11,6 @@ No big changes were done to our 2nd version of [Design](Design.md),[Architecture
 ## Currently Implemented Functionalities
 The PoC currently supports environmental monitoring and emulate actuators to adjust indoor microclimate. In detail we provide:
 1. temperature and humidity measurements simulation feature; 
-7. actuators (simulated with a simple led).
 2. the possibility to send measures to the cloud with LoRaWAN using TheThingsNetwork infrastructure;
 3. the possibility to switch to MQTT on-demand and have real-time monitoring and then switch back to LoRaWAN less frequent messages;
 4. persistent storage;
@@ -24,5 +23,5 @@ Our  evaluation is about real-time performances. The key idea here is that even 
 After several experiment we see that the window will stabilize on a size of 45-50 samples, that means we send a message each 5000ms hence the real-time performances can be considered reasonable.   
 
 
-we have missed to evaluate (and we did not plan to do it for the moment) the overall UX of the museum dashboard and we did not evaluate the capacity of our backend. This is because we think that the amount of traffic will be very low and also because the overall dashboard is far from being complete and presentable to a final user.
+we have missed to evaluate (and we did not plan to do it for the moment) the overall UX of the museum dashboard and we did not evaluate the capacity of our backend. This is because we think that the amount of traffic will be very low and also because the overall dashboard is far from being complete and presentable to a final user. We also missed the actuator simulation feature.
 
