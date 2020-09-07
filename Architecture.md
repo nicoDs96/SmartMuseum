@@ -11,8 +11,8 @@ On the backend, the key concept is to develop a microservice architecture to obt
 The system can be easily integrated with already existing services. All those microservices are accessed thanks to a middleware that exposes a uniform API for the consumers.  
 The system, even if very simple in the beginning, can evolve to be very complex with very little effort and provide a variety of features and improvements.
 
-### Nucleo Boards
-The Nucleo boards used  will be in charge of collecting environmental sensors data and to send them to the Broker. Ideally, based on the received thresholds, they should also control the actuators to make the environment controlled. The board will read data with an acceptable frequency then aggregate and send them to the Broker. From the broker, the Middleware will be in charge of consuming them and store them in the DB. The API will provide a uniform interface to clients to either aggregated data(LoRaWAN)  real-time data (MQTT) and historical data (from DB).
+### Heltec Boards
+The Heltec boards used  will be in charge of collecting environmental sensors data and to send them to the Broker. Ideally, based on the received thresholds, they should also control the actuators to make the environment controlled. The board will read data with an acceptable frequency then aggregate and send them to the Broker. From the broker, the Middleware will be in charge of consuming them and store them in the DB. The API will provide a uniform interface to clients to either aggregated data(LoRaWAN)  real-time data (MQTT) and historical data (from DB).
 
 ### Broker
 The broker will just collect data from the boards when published. As initial solution we will propose to the museum to collect environmental data in aggregated from (for example avg min and max temperature of a given time range). Based on this proposal we decided to use TheThingsNetwork and use their sdk to consume those data given their open source and free-to-use philosophy. Also this choice allows us to choose an energy saving policy for communication according to our needs.  
