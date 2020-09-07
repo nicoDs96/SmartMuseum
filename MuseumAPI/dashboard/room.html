@@ -14,15 +14,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 </head>
 
 <body>
   <nav class="navbar navbar-light" style="background-color: #ff0000;">
-     <button id="mainRoom" type="button" style="background-color: cornflowerblue;" class="btn btn-primary btn-sm">Smart Museum</button>
+    <button id="mainRoom" type="button" style="background-color: cornflowerblue;" class="btn btn-primary btn-sm">Smart
+      Museum</button>
   </nav>
-
   <div class="card text-center">
+    <div class="card-header">
+      <h5 class="card-title" id="idRoom"></h5>
+    </div>
+    <div class="card-body">
+      <h8 class="card-title">Monitoring: average temperature. </h8>
+      <table class="table table-striped">
+        <tbody>
+          <div id="chart"> </div>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="card-body">
+      <h8 class="card-title">Monitoring:  average humidity. </h8>
+      <table class="table table-striped">
+        <tbody>
+          <div id="chart2"> </div>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="card-footer text-muted">
+    </div>
+  </div>
+
+
+  <!-- <div class="card text-center">
     <div class="card-header">
       <h5 class="card-title" id="idRoom"></h5>
     </div>
@@ -57,16 +85,16 @@
           </tr>
         </tbody>
       </table>
-      
+
     </div>
     <div class="card-footer text-muted">
-       
+
     </div>
-  </div>
+  </div> -->
 
 
 
-<!-- 
+  <!-- 
   <div class="card">
     <div class="card-header">
       <h3 id="idRoom"></h3>
@@ -117,7 +145,7 @@
     </div>
   </div>
 -->
-<!--
+  <!--
   <div class="card">
     <div class="card-header">
       Alert Treshholds

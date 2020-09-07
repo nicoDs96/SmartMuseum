@@ -1,6 +1,8 @@
 var data;
+
 var flagRealTime = true;
 var minT1
+var ctx = $('#myChart');
 var myIpAddr =
     $(document).ready(async function () {
 
@@ -18,38 +20,79 @@ var myIpAddr =
             //LOAD DATA FROM API
 
 
+            //   const element = array[index];
+            Plotly.plot('chart', [{
+                y: [getData(idRoom)],
+                type: 'line'
+            }]);
+
+            Plotly.plot('chart2', [{
+                y: [getDataU(idRoom)],
+                type: 'line',
+                marker: {
+                    color: 'rgb(219, 64, 82)',
+                    size: 12
+                  }
+            }]);
+
+            setInterval(function() {
+                Plotly.extendTraces('chart', { y: [[getData(idRoom)]] }, [0])
+                Plotly.extendTraces('chart2', { y: [[getDataU(idRoom)]] }, [0])
+              }, 2000);
+
+
+            // //REAL TIME 
+            // interval = setInterval(() => {
+            //     APICall(url = `http://127.0.0.1:3000/stats/${idRoom}`, method = 0, data = {}) // 1: POST, 0: GET
+            //         .then((response) => {
+
+            //             try { //update the status iff it is available online
+            //                 console.log(response)
+
+            //                 $('#Tem_max').text(response[0]["Tem_max"]);
+            //                 $('#Tem_min').text(response[0]["Tem_min"]);
+            //                 $('#Tem_avg').text(response[0]["Tem_avg"]);
+            //                 $('#Hum_min').text(response[0]["Hum_min"]);
+            //                 $('#Hum_max').text(response[0]["Hum_max"]);
+            //                 $('#Hum_avg').text(response[0]["Hum_avg"]);
 
 
 
-            //REAL TIME 
-            interval = setInterval(() => {
-                APICall(url = `http://127.0.0.1:3000/stats/${idRoom}`, method = 0, data = {}) // 1: POST, 0: GET
-                    .then((response) => {
 
-                        try { //update the status iff it is available online
-                            console.log(response)
+            //                 // console.log(Number(response[0]["Tem_max"]));
 
-                            $('#Tem_max').text(response[0]["Tem_max"]);
-                            $('#Tem_min').text(response[0]["Tem_min"]);
-                            $('#Tem_avg').text(response[0]["Tem_avg"]);
-                            $('#Hum_min').text(response[0]["Hum_min"]);
-                            $('#Hum_max').text(response[0]["Hum_max"]);
-                            $('#Hum_avg').text(response[0]["Hum_avg"]);
+
+            //                 // Plotly.extendTraces('chart', { y: [response[0]["Tem_max"]]});
+
+                           
+
+                            
+                            
 
 
 
 
 
+            //             } catch (error) {
+            //                 console.log(error);
+            //             }
+
+            //         })
+            //         .catch(function (e) { console.log(`error ${e}`); }); // r={}
+
+            //     //      //   const element = array[index];
+            //     //      Plotly.plot('chart',[{
+            //     //         y:[response[0]["Tem_max"]],
+            //     //         type:'line'
+            //     // }]);
+
+            //     // setInterval(function() {
+            //     //     Plotly.extendTraces('graph', { y: [response[0]["Tem_max"]] }, [0])
+            //     //   }, 5000);
+            //     console.log(data);
+            // }, 5000);
 
 
-                        } catch (error) {
-                            console.log(error);
-                        }
-
-                    })
-                    .catch(function (e) { console.log(`error ${e}`); }); // r={}
-
-            }, 5000);
 
         } else {
 
@@ -63,8 +106,8 @@ var myIpAddr =
                     try {
                         // SET DATA TO HTML 
                         console.log(response.room1[0]["room"]);
-                       
-                       
+
+
 
                         $('#Tem_max').text(response.room1[0]["Tem_max"]);
                         $('#Tem_min').text(response.room1[0]["Tem_min"]);
@@ -94,7 +137,7 @@ var myIpAddr =
 
                 }) // r={}
                 .catch(function (e) { console.log(`error ${e}`); });
-                
+
             interval = setInterval(() => {
 
                 APICall(url = `http://127.0.0.1:3000/stats`, method = 0, data = {})
@@ -175,8 +218,85 @@ $("#mainRoom").click(function () {
     window.location.href = "/";
 });
 
+function getData(i) {
+    
+    APICall(url = `http://127.0.0.1:3000/stats/${i}`, method = 0, data = {}) // 1: POST, 0: GET
+        .then((response) => {
+
+            //update the status iff it is available online
+            console.log(response)
+
+            $('#Tem_max').text(response[0]["Tem_max"]);
+            $('#Tem_min').text(response[0]["Tem_min"]);
+            $('#Tem_avg').text(response[0]["Tem_avg"]);
+            $('#Hum_min').text(response[0]["Hum_min"]);
+            $('#Hum_max').text(response[0]["Hum_max"]);
+            $('#Hum_avg').text(response[0]["Hum_avg"]);
 
 
+
+
+            // console.log(Number(response[0]["Tem_max"]));
+
+
+            // Plotly.extendTraces('chart', { y: [response[0]["Tem_max"]]});
+
+            console.log("debug");
+            
+            
+           
+             sessionStorage.setItem('dataS',Number(response[0]["Tem_avg"]))
+            
+         
+
+
+        })
+        .catch(function (e) { console.log(`error ${e}`); }); // r={}
+
+       // console.log(Number(dataS));
+       var dataS1 = sessionStorage.getItem('dataS');
+       console.log('"'+dataS1+'"');
+       
+       
+        return  dataS1;
+
+}
+function getDataU(i) {
+    
+    APICall(url = `http://127.0.0.1:3000/stats/${i}`, method = 0, data = {}) // 1: POST, 0: GET
+        .then((response) => {
+
+            //update the status iff it is available online
+            console.log(response)
+
+
+
+
+            // console.log(Number(response[0]["Tem_max"]));
+
+
+            // Plotly.extendTraces('chart', { y: [response[0]["Tem_max"]]});
+
+            console.log("debug");
+            
+            
+           
+             sessionStorage.setItem('dataSU',Number(response[0]["Hum_avg"]))
+            
+         
+
+
+        })
+        .catch(function (e) { console.log(`error ${e}`); }); // r={}
+
+       // console.log(Number(dataS));
+       var dataS1 = sessionStorage.getItem('dataSU');
+       console.log('"'+dataS1+'"');
+       
+       
+        return  dataS1;
+
+}
 
 function addMT(id) {
     var newCount = parseInt($(id).text()) + 1;
