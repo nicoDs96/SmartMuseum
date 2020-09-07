@@ -20,8 +20,9 @@ The PoC currently supports environmental monitoring and emulate actuators to adj
 
 ## Evaluation Results
 
-1.
-2.
+Our  evaluation is about real-time performances. The key idea here is that even if  we read sensors each 10ms the messages take some time to arrive from the board to the API. So we measured the network latency and we adapt our reading window according to it to save resources (less energy consumption) but still achieving near realtime performances (details in [Evaluation](Evaluation.md) file).  
+After several experiment we see that the window will stabilize on a size of 45-50 samples, that means we send a message each 5000ms hence the real-time performances can be considered reasonable.   
+
 
 we have missed to evaluate (and we did not plan to do it for the moment) the overall UX of the museum dashboard and we did not evaluate the capacity of our backend. This is because we think that the amount of traffic will be very low and also because the overall dashboard is far from being complete and presentable to a final user.
 

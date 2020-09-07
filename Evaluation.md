@@ -83,7 +83,14 @@ From [BSON specification](http://bsonspec.org/spec.html) we can read that int32 
 On this very basic estimation we should add a higher data volume each time we switch to real time monitoring. In this case we assume one message per second, hence 86.400 message a day, so 17 MB of message a day. Considering this a very extraordinary event, the data volume is almost null.
 
 ## Adaptive Transmission Rates
-At the end of the first tests we expect also to provide detailed description of network latency in realtime mode and we aim to adjust the transmission rate according to the measured latency. Indeed if we need to measure each 0.05 seconds but the messages takes 1.5 seconds to arrive, the best solution might be to send one message each 1.5 seconds with a list of measurements at frequency of 0.05 seconds as payload. With this approach we save resources (less energy consumption) but still achieving near realtime performances. 
+Our  evaluation is about real-time performances. The key idea here is that even if  we read sensors each 10ms the messages take some time to arrive from the board to the API. So we measured the network latency and we adapt our reading window according to it to save resources (less energy consumption) but still achieving near realtime performances.  
+Each time the network latency is greater than ```window size * sensor reading period``` we set the new widow size equal to the network latency. After 30 messages sent without any changes in the window size we shrink the window size of 15%. 
+
+<p align="center">
+  <img height="100%" width="100%" src="./img_new/Immagine.png">
+</p>   
+
+After several experiment we see that the window will stabilize on a size of 45-50 samples, that means we send a message each 45*10ms hence the real-time performances can be considered reasonable.  
 
 ## Actuators Simulations
 To simulate actuators we are going to simply send start and stop messages from our API to a simulation board that will trigger a signal and make a LED blink. We assume the  on/off signal used to make the led blink can be considereted the same of an actuator changing indoor climate.
