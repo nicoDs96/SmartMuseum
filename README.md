@@ -1,3 +1,7 @@
+<p align="center">
+  <img height="100%" width="100%" src="./img_new/logo.png">
+</p>   
+
 # SmartMuseum
 Smart Museum PoC App from Internet of Things course a.y. 2020 at Sapienza University, Rome.
 
