@@ -1,5 +1,5 @@
 # Architecture   
-This document is the second version of the architecture for the SmartMuseum project. The first version is in the [history folder](history/Architecture.md). Changes to the original architecture reflect the fact that our first project was too simple in core feature provided, not strictly related to the IoT field and also to wide. Here we decided to only focus on the specific indoor environment monitoring feature and the architecture reflects those changes. Also, here we give more attention to the IoT related architectural components.
+This document is the final version of the architecture for the SmartMuseum project. The first version is in the [history folder](history/Architecture.md). Changes to the original architecture reflect the fact that our first project was too simple in core feature provided, not strictly related to the IoT field and also to wide. Here we decided to only focus on the specific indoor environment monitoring feature and the architecture reflects those changes. Also, here we give more attention to the IoT related architectural components.
  
 ## High-Level Presentation 
 <p align="center">
