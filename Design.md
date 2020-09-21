@@ -1,5 +1,5 @@
 # Design
-This document is the second version of the design document for the Smart Museum project. The first version is in the [history folder](history/Design.md). Changes to the original design reflect the fact that our first project was too simple in core feature provided, not strictly related to the IoT field and also to wide. Here we decided to only focus on the specific indoor environment monitoring feature. As in the first project, since it was a strong point, the target is still very specific. In this document we revisit our target (that became museum curators only) and with a simple storyboard we illustrate what the product should offer.
+This document is the final version of the design document for the Smart Museum project. The first version is in the [history folder](history/Design.md). Changes to the original design reflect the fact that our first project was too simple in core feature provided, not strictly related to the IoT field and also to wide. Here we decided to only focus on the specific indoor environment monitoring feature. As in the first project, since it was a strong point, the target is still very specific. In this document we revisit our target (that became museum curators only) and with a simple storyboard we illustrate what the product should offer.
 
 
 
